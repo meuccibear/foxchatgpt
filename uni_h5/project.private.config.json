@@ -1,0 +1,64 @@
+{
+    "description": "项目私有配置文件。此文件中的内容将覆盖 project.config.json 中的相同字段。项目的改动优先同步到此文件中。详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html",
+    "projectname": "AI智能客服",
+    "setting": {
+        "compileHotReLoad": true,
+        "urlCheck": false,
+        "bigPackageSizeSupport": false
+    },
+    "condition": {
+        "miniprogram": {
+            "list": [
+                {
+                    "name": "创作一篇文章",
+                    "pathName": "pages/write/chat",
+                    "query": "prompt_id=1",
+                    "launchMode": "default",
+                    "scene": null
+                },
+                {
+                    "name": "",
+                    "pathName": "pages/write/index",
+                    "query": "",
+                    "launchMode": "default",
+                    "scene": null
+                },
+                {
+                    "name": "",
+                    "pathName": "pages/index/index",
+                    "query": "",
+                    "launchMode": "default",
+                    "scene": null
+                },
+                {
+                    "name": "",
+                    "pathName": "pages/login/pc",
+                    "query": "scene=code%3D11231231",
+                    "launchMode": "default",
+                    "scene": null
+                },
+                {
+                    "name": "",
+                    "pathName": "pages/commission/index",
+                    "query": "",
+                    "launchMode": "default",
+                    "scene": null
+                },
+                {
+                    "name": "",
+                    "pathName": "pages/write/chat",
+                    "query": "prompt_id=9",
+                    "launchMode": "default",
+                    "scene": null
+                },
+                {
+                    "name": "",
+                    "pathName": "pages/pay/vip",
+                    "query": "",
+                    "launchMode": "default",
+                    "scene": null
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,30 @@
+
+后台安装步骤：
+1、在宝塔新建个站点，php版本使用7.3 或 7.4，将“后端”文件夹里的文件上传到站点根目录，运行目录设置为/public
+2、导入数据库文件，数据库文件是 /db.sql
+3、修改数据库连接配置，配置文件是/.env
+4、正式使用时，请把调试模式关闭：/.env文件第一行，true改成false
+5、超管后台地址：http://域名/super  初始账号密码：super  123456   及时修改
+6、后台地址：http://域名/admin  初始账号密码：admin  123456   及时修改
+
+注意：后台用https访问，否则升级会失败
+
+====================
+
+
+《需要准备的材料》
+https://www.yuque.com/smartfox/qzkgyi/amkv56sv8n87veig
+
+《系统安装部署教程》
+https://www.yuque.com/smartfox/qzkgyi/rcbh6u770068kfqc
+
+《反向代理配置教程》
+https://www.yuque.com/smartfox/qzkgyi/tb5ozi2zryp4g1z0
+
+《如何升级系统？》
+https://www.yuque.com/smartfox/qzkgyi/mkfa6rptmuyo3gec
+
+------
+
+《AI创作系统》完整手册
+https://www.yuque.com/smartfox/qzkgyi

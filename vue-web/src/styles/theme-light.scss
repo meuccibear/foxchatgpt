@@ -1,0 +1,222 @@
+.theme-light {
+  background: #eff0f0;
+
+  .sidebar-container {
+    .module-list {
+      .module-item {
+        color: #606468;
+        &:hover, &.active {
+          color: #10a37f;
+        }
+      }
+    }
+    .sub-module {
+      background: #f7f7f8;
+      .module-chat {
+        .module-header {
+        }
+      }
+      .group-chat {
+        .module-title {
+          color: #606468;
+        }
+        .group-item {
+          &.active, &:hover {
+            background: #eff0f0;
+          }
+          .group-title {
+            color: #222;
+          }
+          .btn-dropdown{
+            background: #eff0f0;
+          }
+        }
+      }
+      .group-write {
+        .topic-title {
+          color: #606468;
+          span {
+            border-color: #10a37f;
+          }
+        }
+        .prompt-item {
+          background: #eff0f0;
+          border-color: #eff0f0;
+          &.active {
+            border-color: #10a37f;
+          }
+          .prompt-title {
+            color: #222222;
+          }
+          .prompt-desc {
+            color: #666666;
+          }
+          .prompt-ops {
+            background: #eff0f0;
+            .op-item {
+              color: #8e8ea0;
+            }
+          }
+        }
+      }
+      .group-cosplay {
+        .type-title {
+          color: #606468;
+          span {
+            border-color: #10a37f;
+          }
+        }
+        .role-item {
+
+        }
+        .role-item {
+          background: #eff0f0;
+          border-color: #eff0f0;
+          &.active {
+            border-color: #10a37f;
+          }
+          .role-title {
+            color: #222222;
+          }
+          .role-ops {
+            .op-item {
+              color: #8e8ea0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .main-container {
+    .wrapper {
+      .tab-model {
+        background: #f7f7f8;
+        .tab-item {
+          border: 1px solid #eff0f0;
+          color: #606468;
+          &:hover, &.active {
+            color: #10a37f;
+            border: 1px solid #10a37f;
+          }
+        }
+      }
+      .box-msg-list {
+        .list {
+          .text {
+            color: #606468;
+          }
+        }
+      }
+      .style-chat {
+        .list {
+          .row-user {
+            background: none;
+            .message {
+              .text {
+                background: #10a37f;
+                color: #fff;
+              }
+            }
+          }
+          .row-ai {
+            background: none;
+            .message {
+              .text {
+                background: #f7f7f8;
+                color: #606468;
+              }
+            }
+          }
+        }
+      }
+      .style-write {
+        .list {
+          .row-user {
+            background: #f7f7f8;
+            border-bottom: 1px solid #eff0f0;
+          }
+          .row-ai {
+            background: #f7f7f8;
+          }
+        }
+
+      }
+      .box-input {
+        background: #eff0f0;
+        .input {
+          box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+          .el-textarea__inner {
+            background: #f7f7f8;
+            color: #72787e;
+
+            &::-webkit-input-placeholder {
+              color: #72787e;
+            }
+            &:focus {
+              border-color: #10a37f;
+            }
+          }
+        }
+        .btn-send {
+          background: #f7f7f8 !important;
+          color: #72787e;
+          &:hover {
+            color: #10a37f;
+          }
+        }
+      }
+
+      .markdown-body .highlight pre, .markdown-body pre {
+        background: #e6e7e9;
+      }
+
+      .welcome {
+        .title {
+          color: #606468;
+        }
+        .h-item {
+          color: #606468;
+        }
+
+        .tips-list {
+          .column {
+            li {
+              background: #f7f7f8;
+              color: #606468;
+              &:active {
+                background: #eff0f0;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .gold {
+      .tab-model {
+        .active {
+          border: 1px solid #f5ad0c !important;
+          color: #f5ad0c !important;
+        }
+      }
+      .box-input {
+        .input {
+          textarea {
+            border: 1px solid #ffa41a !important;
+          }
+        }
+      }
+    }
+
+  }
+
+  .float {
+    background: #fff;
+    color: #606468;
+    &:hover {
+      border-color: #10a37f;
+      color: #10a37f;
+    }
+  }
+}

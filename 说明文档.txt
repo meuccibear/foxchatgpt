@@ -1,0 +1,70 @@
+
+后台安装步骤：
+1、在宝塔新建个站点，php版本使用7.3 或 7.4，只需将“server”文件夹里的文件上传到站点根目录，运行目录设置为/public
+2、导入数据库文件，数据库文件是 /db.sql
+3、修改数据库连接配置，配置文件是/.env
+4、正式使用时，请把调试模式关闭：/.env文件第一行，true改成false
+5、超管后台地址：http://域名/super  初始账号密码：super  123456   及时修改
+6、后台地址：http://域名/admin  初始账号密码：admin  123456   及时修改
+
+注意：后台用https访问，否则升级会失败
+
+====================
+
+小程序上传：
+1、打开站点后台，找到小程序配置：系统->小程序->参数配置，配置小程序参数
+2、在后台小程序管理“上传代码”页面，填入上传密钥，并配置好小程序的ip白名单，点击上传代码按钮
+3、上传完成以后，登录小程序后台体验一下，没问题即可提交审核
+注意：需先配置支付参数、AI参数，否则小程序会因为功能不正常而驳回审核
+
+=====================
+
+文件夹说明(v1.8.7)：
+1、server：文件夹是后台文件（里边的文件上传到服务器站点）
+2、vue-admin：是管理后台的前端源码（供二次开发用）
+3、vue-super：是超管后台的前端源码（供二次开发用）
+3、vue-web：是PC版的源码（供二次开发用）
+4、wxapp：是微信小程序源码（供二次开发用，线上代码可在后台一键上传）
+5、uni_h5：是H5版源码（供二次开发用，使用uniapp打包h5）
+5、db.sql文件是数据库文件
+
+=====================
+
+《需要准备的材料》
+https://www.yuque.com/smartfox/qzkgyi/amkv56sv8n87veig
+
+《系统安装部署教程》
+https://www.yuque.com/smartfox/qzkgyi/rcbh6u770068kfqc
+
+《反向代理配置教程》
+https://www.yuque.com/smartfox/qzkgyi/tb5ozi2zryp4g1z0
+
+《如何升级系统？》
+https://www.yuque.com/smartfox/qzkgyi/mkfa6rptmuyo3gec
+
+------
+
+《AI创作系统》完整手册
+https://www.yuque.com/smartfox/qzkgyi
+
+
+-------
+
+二次开发文档：
+
+ThinkPHP6.0完全开发手册
+https://www.kancloud.cn/manual/thinkphp6_0/1037479
+
+后台的前端框架 和 PC端的框架一样（vue-element-admin)：
+https://panjiachen.github.io/vue-element-admin-site/zh/guide/
+建议node16，安装依赖用cnpm，即 cnpm install
+
+uniapp开发文档
+https://uniapp.dcloud.net.cn/
+建议node16，安装依赖用cnpm，即 cnpm install
+
+微信小程序开发文档
+https://developers.weixin.qq.com/miniprogram/dev/framework/
+
+
+
