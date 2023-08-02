@@ -49,7 +49,7 @@ export default {
 </script>
 <style>
 page {
-    background: #f7f7f8;
+    background: #f2f2f2;
 }
 .list {
     background: #fff;

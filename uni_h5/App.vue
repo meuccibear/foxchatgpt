@@ -16,7 +16,7 @@
 			} else {
 				this.globalData.system = 'other';
 			}
-			
+
 			// 站点sitecode
 			var search = window.location.search
 			if(search && search.indexOf('?') != -1) {
@@ -33,7 +33,7 @@
 					uni.setStorageSync('sitecode', sitecode)
 				}
 			}
-			
+
 
 			// 初始化微信jssdk
 			util.request({
@@ -83,8 +83,9 @@
 		}
 	};
 </script>
-<style>
+<style lang="scss">
 	button::after {
 		display: none;
 	}
+  @import './common/uni.css';
 </style>

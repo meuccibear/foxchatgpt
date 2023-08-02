@@ -20,6 +20,10 @@
         <svg-icon class="icon" icon-class="ic_mod_draw" style="font-size: 23px;" />
         <span>绘画</span>
       </div>
+      <div class="module-item" :class="{active: module === 'draw'}" @click="switchModule('knowledge')">
+        <svg-icon class="icon" icon-class="ic_knowledge" style="font-size: 23px;" />
+        <span>知识库</span>
+      </div>
       <div class="menu-bottom">
         <div class="module-item" @click="toDoc('help')">
           <svg-icon class="icon" icon-class="ic_doc" style="font-size: 24px;" />
@@ -267,6 +271,14 @@ export default {
       } else if (module === 'draw') {
         this.$message.warning('PC端绘画即将上线')
         return false
+      } else if (module === 'knowledge'){
+        if (!this.cosplayRoleList || this.cosplayRoleList.length === 0) {
+          this.activeRoleId = 0
+          this.getAllRoles()
+        }
+        if (this.activeRoleId) {
+          this.$emit('changeRoleId', this.activeRoleId)
+        }
       }
       this.module = module
       this.searchKeyword = ''

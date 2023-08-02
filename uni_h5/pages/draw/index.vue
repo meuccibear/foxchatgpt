@@ -1,6 +1,6 @@
 <template>
     <view class="page">
-        
+
     </view>
 </template>
 
@@ -12,14 +12,14 @@ export default {
     },
     data() {
         return {
-           
+
         };
     },
     onLoad(options) {
-        
+
     },
     methods: {
-        
+
     }
 };
 </script>
@@ -98,7 +98,7 @@ page {
 }
 
 .prompt-item {
-    background: #f7f7f8;
+    background: #f2f2f2;
     padding: 20rpx 30rpx;
     border-radius: 14rpx;
     margin: 0 20rpx 20rpx 0;

@@ -6,7 +6,7 @@
 				:style="'bottom: ' + (inputShow ? '316rpx' : '102rpx') + ';'">
 				<view class="list">
 					<block v-for="(item, index) in lists" :key="index">
-						<view class="message" :data-index="index" v-if="item.user == 'AI'" style="background: #f7f7f8">
+						<view class="message" :data-index="index" v-if="item.user == 'AI'" style="background: #f2f2f2">
 							<view class="avatar">
 								<img mode="widthFix" src="/static/img/ic_ai.png" />
 							</view>
@@ -28,7 +28,7 @@
 							</view>
 						</view>
 					</block>
-					<view class="message" style="background: #f7f7f8" v-if="writing || writingText">
+					<view class="message" style="background: #f2f2f2" v-if="writing || writingText">
 						<view class="avatar">
 							<img src="/static/img/ic_ai.png" />
 						</view>
@@ -139,13 +139,13 @@
 						return
 					}
 				}
-				
+
 				if (textOutputSi) {
 					clearInterval(textOutputSi)
 					textOutputSi = 0
 					textStacks = []
 				}
-				
+
 				this.lists.push({
 					user: '我',
 					message: message
@@ -176,7 +176,7 @@
 				const decoder = new TextDecoder('utf-8');
 				let done = false;
 				let curAiMsg = '';
-				
+
 				textOutputSi = setInterval(() => {
 					if (textStacks.length > 0) {
 						this.writingText += textStacks.shift();
@@ -191,13 +191,13 @@
 							});
 						}
 						this.writingText = '';
-				
+
 						setTimeout(() => {
 							this.scrollToBottom();
 						}, 500)
 					}
 				}, 50)
-				
+
 				while (!done) {
 					this.scrollToBottom()
 					const {
@@ -234,7 +234,7 @@
 							// char = char.replaceAll("\n", "<br>");
 							this.writing = true;
 							// this.writingText += char;
-							
+
 							for (var i = 0; i < char.length; i++) {
 								textStacks.push(char[i])
 							}
@@ -242,7 +242,7 @@
 					}
 					done = readerDone;
 				}
-				
+
 				this.writing = false;
 			},
 

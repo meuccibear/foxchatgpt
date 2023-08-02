@@ -169,13 +169,13 @@ function mediaPolyfill () {
         }
     }
 
-    if (isApiNotImplemented("chooseMessageFile")) {
-        //从微信聊天会话中选择文件。
-        uni.chooseMessageFile = function (options) {
-            console.warn("api: uni.chooseMessageFile 从微信聊天会话中选择文件。 在当前平台不支持，回调失败")
-            options.fail && options.fail()
-        }
-    }
+    // if (isApiNotImplemented("chooseMessageFile")) {
+    //     //从微信聊天会话中选择文件。
+    //     uni.chooseMessageFile = function (options) {
+    //         console.warn("api: uni.chooseMessageFile 从微信聊天会话中选择文件。 在当前平台不支持，回调失败")
+    //         options.fail && options.fail()
+    //     }
+    // }
 
     if (isApiNotImplemented("getRecorderManager")) {
         //获取全局唯一的录音管理器 recorderManager

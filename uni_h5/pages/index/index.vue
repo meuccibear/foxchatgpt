@@ -9,7 +9,7 @@
 				:scroll-top="scrollTop">
 				<view class="list" v-if="lists && lists.length > 0">
 					<block v-for="(item, index) in lists" :key="index">
-						<view class="message" :data-index="index" v-if="item.user == 'AI'" style="background: #f7f7f8">
+						<view class="message" :data-index="index" v-if="item.user == 'AI'" style="background: #f2f2f2">
 							<view class="avatar">
 								<img src="/static/img/ic_ai.png" />
 							</view>
@@ -31,7 +31,7 @@
 							</view>
 						</view>
 					</block>
-					<view class="message" style="background: #f7f7f8" v-if="writing || writingText">
+					<view class="message" style="background: #f2f2f2" v-if="writing || writingText">
 						<view class="avatar">
 							<img src="/static/img/ic_ai.png" />
 						</view>
@@ -48,7 +48,22 @@
 				</view>
 			</scroll-view>
 
-			<view class="box-input">
+      <view class="box-input" :style="'bottom: ' + (inputShow ? '0' : '-204rpx') + ';'">
+<!--			<view class="box-input">-->
+        <view class="tools">
+          <view
+              v-for="(item, index) in langs"
+              class="item"
+              :class="{active: userCache.lang.indexOf(item) > -1 }"
+              @click="changeLang(item)">
+            <text>{{item}}</text>
+            <image class="ic_sj" src="/static/images/write/ic_sj.png"></image>
+          </view>
+          <view class="item close" @click="showInput"
+                :style="'transform: rotate(' + (inputShow ? '180' : 0) + 'deg);'">
+            <image src="/static/images/write/ic_up.png" style="width: 32rpx;height: 32rpx;"></image>
+          </view>
+        </view>
 				<view class="input">
 					<textarea type="text" v-model="message" confirm-type="send" @confirm="sendConfirm"
 						:auto-height="true" placeholder="输入你的问题" maxlength="3000" cursor-spacing="0"></textarea>
@@ -62,6 +77,20 @@
 			</view>
 		</view>
 
+    <view>
+      <!-- 输入框示例 -->
+      <uni-popup ref="inputDialog" type="dialog">
+        <uni-popup-dialog
+            ref="inputClose"
+            mode="checkbox"
+            title="请选择知识库"
+            type="info"
+            placeholder="请输入内容"
+            :value="userCache.knowledgeBaseCheckData"
+            @confirm="dialogInputConfirm"
+            :checkboxData="knowledgeBase"></uni-popup-dialog>
+      </uni-popup>
+    </view>
 	</view>
 </template>
 
@@ -86,6 +115,18 @@
 			Welcome
 		},
 		data() {
+      let userCache = {
+        lang: [],
+        knowledgeBaseCheckData: []
+      }
+      uni.getStorage({
+        key: 'UserCache',
+        success: (res) => {
+          console.log('getCache:', res.data)
+          userCache = res.data
+        }
+      })
+      console.log('data:')
 			return {
 				pageIsLoad: false,
 				siteroot: '',
@@ -101,7 +142,17 @@
 				hasModel4: false,
 				model4Name: '',
 				balance_model4: '',
-				model: 'default'
+				model: 'default',
+        userCache: userCache,
+        langs: ['联网', '知识库'],
+        inputShow: true,
+        knowledgeBase: [
+          {
+            value: 'mvdbb96ca0b7e3ef4c1b97e7f68722f8',
+            name: '默认'
+          }
+        ]
+      //   ["internetsearch","repodb:mvdbb96ca0b7e3ef4c1b97e7f68722f8","repodb:mvdbb96ca0b7e3ef4c1b97e7f685555"]
 			};
 		},
 		onLoad(options) {
@@ -120,7 +171,8 @@
 				siteroot: app.globalData.siteroot.replace('/web.php', ''),
 				page_title: app.globalData.page_title
 			});
-
+      this.changeLang()
+      console.log('knowledgeBaseCheckData:', this.userCache.knowledgeBaseCheckData)
 			app.globalData.util.checkLogin().then(() => {
 				this.getHistoryMsg();
 				this.checkModel4();
@@ -269,7 +321,7 @@
 				this.writing = false;
 				this.getBalanceModel4();
 			},
-			
+
 			abortFetching() {
 				console.log('abortFetching');
 				fetchController.abort()
@@ -284,7 +336,7 @@
 					}
 					this.writing = false;
 					this.writingText = '';
-					
+
 					setTimeout(() => {
 						this.scrollToBottom();
 					}, 200)
@@ -297,6 +349,53 @@
 				}, 50)
 			},
 
+      showInput() {
+        this.inputShow = !this.inputShow
+        setTimeout(() => {
+          this.scrollBottom()
+        }, 300)
+      },
+      dialogInputConfirm(val) {
+        if(val){
+          this.userCache.knowledgeBaseCheckData = val
+          this.cache()
+          this.changeLang()
+        }
+      },
+      cache: function (){
+        console.log('cache:', this.userCache)
+        uni.setStorage({
+          key: 'UserCache',
+          data: this.userCache
+        })
+      },
+      changeLang(lang) {
+        if (lang) {
+          if (this.langs[1] === lang) {
+            this.$refs.inputDialog.open()
+            return
+          }
+          const index = this.userCache.lang.indexOf(lang)
+          if ( index > -1) {
+            this.userCache.lang.splice(index, 1)
+          } else {
+            this.userCache.lang.push(lang)
+          }
+          this.inputShow = true
+        } else {
+          const lan = this.langs[1]
+          const index = this.userCache.lang.indexOf(lan)
+          if(this.userCache.knowledgeBaseCheckData.length != 0){
+            if(index === -1){
+              console.log('添加了')
+              this.userCache.lang.push(lan)
+            }
+          } else if(index > -1) {
+            this.userCache.lang.splice(index, 1)
+          }
+        }
+        this.cache()
+      },
 			getHistoryMsg() {
 				app.globalData.util
 					.request({
@@ -466,7 +565,7 @@
 							_this.getHistoryMsg()
 							_this.getBalanceModel4()
 						}
-						
+
 					})
 				} else {
 					this.setData({
@@ -553,61 +652,134 @@
 	}
 
 
-	.box-input {
-		width: 100%;
-		padding: 40rpx 0;
-		left: 0;
-		bottom: 0;
-		border-top: 1px solid #d8d8e2;
-		background: #f6fafc;
-	}
+  .box-input {
+    width: 100%;
+    height: auto;
+    padding: 0 30rpx;
+    border-top: 1px solid #d8d8e2;
+    background: #f6fafc;
+    box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+    transition: all 0.3s;
+  }
 
-	.box-input .input {
-		width: 690rpx;
-		margin: 0 30rpx;
-		position: relative;
-		box-sizing: border-box;
-		box-shadow: 0 0 12rpx rgba(0, 0, 0, 0.1);
-		background: #fefefe;
-	}
+  .box-input .tools {
+    width: 100%;
+    height: 72rpx;
+    margin-bottom: 10rpx;
+    box-sizing: border-box;
+    margin-top: 30rpx;
+  }
 
-	.box-input .input textarea {
-		width: 580rpx;
-		padding: 20rpx 10rpx 20rpx 20rpx;
-		border-radius: 10rpx;
-		line-height: 40rpx;
-		max-height: 800rpx;
-		overflow-x: hidden;
-		overflow-y: auto;
-	}
+  .box-input .tools .item {
+    width: auto;
+    height: 56rpx;
+    line-height: 56rpx;
+    background: #fff;
+    font-size: 24rpx;
+    border-radius: 10rpx;
+    border: 1px solid #ddd;
+    color: #444;
+    float: left;
+    margin-right: 20rpx;
+    position: relative;
+    overflow: visible;
+    padding: 0 20rpx;
+  }
 
-	.box-input .input .btn-send {
-		position: absolute;
-		right: 0;
-		bottom: 0;
-		width: 100rpx;
-		height: 80rpx;
-		padding: 0;
-		border: none;
-		border-radius: 10rpx;
-		background: none;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		z-index: 9;
-	}
+  .box-input .tools .item .ic_sj {
+    width: 24rpx;
+    height: 12rpx;
+    position: absolute;
+    left: 50%;
+    margin-left: -12rpx;
+    bottom: -12rpx;
+    display: none;
+  }
 
-	.box-input .input .btn-send::after {
-		display: none;
-	}
+  .box-input .tools .item.active {
+    border-color: #04BABE;
+  }
 
-	.box-input .input .btn-send:active {
-		background: #f2f2f2;
-	}
+  .box-input .tools .item.active .ic_sj {
+    display: block;
+  }
 
-	.box-input .input .btn-send image {
-		width: 40rpx;
-	}
+  .box-input .tools .item:active {
+    background-color: #fafafa;
+  }
+
+  .box-input .tools .close {
+    float: right;
+    margin-right: 0;
+    background: none;
+    border: none;
+    transform: rotate(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s;
+  }
+
+  .box-input .input {
+    width: 100%;
+    position: relative;
+    box-sizing: border-box;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10rpx;
+    overflow: hidden;
+    transition: all 1s;
+    margin-bottom: 40rpx;
+  }
+
+  .box-input .input textarea {
+    width: 100%;
+    height: 240rpx;
+    min-height: 120rpx;
+    max-height: 600rpx;
+    padding: 20rpx 10rpx 20rpx 20rpx;
+    border-radius: 10rpx;
+    line-height: 40rpx;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+    resize: none;
+    overflow: auto;
+  }
+
+  .box-input .input .btn-send {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 80rpx;
+    height: 80rpx;
+    padding: 0;
+    border: none;
+    border-radius: 10rpx;
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9;
+    background:#fff;
+  }
+
+  .box-input .input .btn-send::after {
+    display: none;
+  }
+
+  .box-input .input .btn-send:active {
+    background: #f2f2f2;
+  }
+
+  .box-input .input .btn-send image {
+    width: 40rpx;
+    height: 40rpx;
+  }
 
 	.empty {
 		text-align: center;

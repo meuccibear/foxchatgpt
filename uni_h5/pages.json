@@ -27,6 +27,18 @@
 			}
 		},
 		{
+			"path": "pages/knowledgeBase/knowledgeBase",
+			"style": {
+				"navigationBarTitleText": "知识库信息"
+			}
+		},
+		{
+			"path": "pages/knowledgeBase/list",
+			"style": {
+				"navigationBarTitleText": "知识库列表"
+			}
+		},
+		{
 			"path": "pages/article/article",
 			"style": {
 				"navigationBarTitleText": ""

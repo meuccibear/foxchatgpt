@@ -6,7 +6,7 @@
 				:style="'bottom: ' + (inputShow ? '316rpx' : '102rpx') + ';'">
 				<view class="list">
 					<block v-for="(item, index) in lists" :key="index">
-						<view class="message" :data-index="index" v-if="item.user == 'AI'" style="background: #f7f7f8">
+						<view class="message" :data-index="index" v-if="item.user == 'AI'" style="background: #f2f2f2">
 							<view class="avatar">
 								<img mode="widthFix" src="/static/img/ic_ai.png" />
 							</view>
@@ -28,7 +28,7 @@
 							</view>
 						</view>
 					</block>
-					<view class="message" style="background: #f7f7f8" v-if="writing || writingText">
+					<view class="message" style="background: #f2f2f2" v-if="writing || writingText">
 						<view class="avatar">
 							<img src="/static/img/ic_ai.png" />
 						</view>
@@ -91,7 +91,7 @@
 					role_id: options.role_id
 				})
 			}
-			
+
 			this.setData({
 				system: app.globalData.system,
 				siteroot: app.globalData.siteroot.replace('/web.php', '')
@@ -121,13 +121,13 @@
 						return
 					}
 				}
-				
+
 				if (textOutputSi) {
 					clearInterval(textOutputSi)
 					textOutputSi = 0
 					textStacks = []
 				}
-				
+
 				this.lists.push({
 					user: '我',
 					message: message
@@ -158,7 +158,7 @@
 				const decoder = new TextDecoder('utf-8');
 				let done = false;
 				let curAiMsg = '';
-				
+
 				textOutputSi = setInterval(() => {
 					if (textStacks.length > 0) {
 						this.writingText += textStacks.shift();
@@ -173,13 +173,13 @@
 							});
 						}
 						this.writingText = '';
-				
+
 						setTimeout(() => {
 							this.scrollToBottom();
 						}, 200)
 					}
 				}, 50)
-				
+
 				while (!done) {
 					this.scrollToBottom()
 					const {
@@ -215,7 +215,7 @@
 							// char = char.replaceAll("\n", "<br>");
 							this.writing = true;
 							// this.writingText += char;
-							
+
 							for (var i = 0; i < char.length; i++) {
 								textStacks.push(char[i])
 							}
@@ -223,10 +223,10 @@
 					}
 					done = readerDone;
 				}
-				
+
 				this.writing = false;
 			},
-			
+
 			sendConfirm() {
 				setTimeout(() => {
 					this.sendText()
@@ -308,7 +308,7 @@
 	page {
 		background: #f7f7f7;
 	}
-	
+
 	.box-input {
 		width: 100%;
 		padding: 40rpx 0;
@@ -317,7 +317,7 @@
 		border-top: 1px solid #d8d8e2;
 		background: #f6f9fc;
 	}
-	
+
 	.box-input .input {
 		width: 690rpx;
 		margin: 0 30rpx;
@@ -326,7 +326,7 @@
 		box-shadow: 0 0 12rpx rgba(0, 0, 0, 0.1);
 		background: #fefefe;
 	}
-	
+
 	.box-input .input textarea {
 		width: 580rpx;
 		padding: 20rpx 10rpx 20rpx 20rpx;
@@ -336,7 +336,7 @@
 		overflow-x: hidden;
 		overflow-y: auto;
 	}
-	
+
 	.box-input .input .btn-send {
 		position: absolute;
 		right: 0;
@@ -352,19 +352,19 @@
 		justify-content: center;
 		z-index: 9;
 	}
-	
+
 	.box-input .input .btn-send::after {
 		display: none;
 	}
-	
+
 	.box-input .input .btn-send:active {
 		background: #f2f2f2;
 	}
-	
+
 	.box-input .input .btn-send image {
 		width: 40rpx;
 	}
-	
+
 	.empty {
 		text-align: center;
 		margin: 0 60rpx;
@@ -373,13 +373,13 @@
 		background: #fff;
 		border-radius: 20rpx;
 	}
-	
+
 	.empty image {
 		width: 404rpx;
 		height: 266rpx;
 		margin-bottom: 40rpx;
 	}
-	
+
 	.empty .tip {
 		width: 100%;
 		line-height: 40rpx;
@@ -387,7 +387,7 @@
 		letter-spacing: 2rpx;
 		color: #444;
 	}
-	
+
 	.btn-finish {
 		width: 60%;
 		height: 80rpx;
@@ -403,7 +403,7 @@
 		background: #39b54a;
 		text-align: center;
 	}
-	
+
 	.page {
 		width: 100%;
 		overflow: hidden;
@@ -416,7 +416,7 @@
 		bottom: 0;
 		background: #fff;
 	}
-	
+
 	.box-msg-list {
 		width: 100%;
 		height: 100%;
@@ -426,23 +426,23 @@
 		box-sizing: border-box;
 		overflow: hidden;
 	}
-	
+
 	.list {
 		width: 100%;
 		height: auto;
 	}
-	
+
 	.message {
 		display: flex;
 		justify-content: flex-start;
 		padding: 40rpx 40rpx;
 		border-bottom: 2rpx solid #eee;
 	}
-	
+
 	.message:last-child {
 		border-bottom: 0;
 	}
-	
+
 	.message .text {
 		width: 100%;
 		color: #343541;
@@ -452,11 +452,11 @@
 		padding: 4rpx 0;
 		overflow: hidden;
 	}
-	
+
 	.message .text span {
 		display: inline;
 	}
-	
+
 	.message .avatar {
 		width: 48rpx;
 		height: 48rpx;
@@ -471,13 +471,13 @@
 		margin-top: 6rpx;
 		overflow: hidden;
 	}
-	
+
 	.message .avatar image,
 	.message .avatar img {
 		width: 48rpx;
 		height: 48rpx;
 	}
-	
+
 	.account {
 		margin: 20rpx 30rpx;
 		padding: 16rpx 24rpx 16rpx 24rpx;
@@ -488,34 +488,34 @@
 		justify-content: space-between;
 		align-items: center;
 	}
-	
+
 	.account .balance {
 		color: #666;
 		font-size: 24rpx;
 	}
-	
+
 	.account .balance text {
 		color: #10a37f;
 		margin-right: 6rpx;
 	}
-	
+
 	.account .btn-pay {
 		display: inline-block;
 		color: #10a37f;
 		margin-left: 20rpx;
 		font-size: 24rpx;
 	}
-	
+
 	.banner-ad {
 		width: 100%;
 		height: 120rpx;
 		border-top: 2rpx solid #ddd;
 	}
-	
+
 	.content {
 		padding: 20rpx;
 	}
-	
+
 	.content view {
 		margin: 10rpx 0;
 		word-break: break-all;
@@ -523,11 +523,11 @@
 		font-size: 28rpx;
 		color: #444;
 	}
-	
+
 	.content image {
 		width: 100%;
 	}
-	
+
 	.btn-copy {
 		color: #409EFF;
 	}

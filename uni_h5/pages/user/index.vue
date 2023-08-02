@@ -52,7 +52,7 @@
 			</view>
 		</view>
         <view class="menus">
-            
+
             <view class="item" data-url="/pages/user/card" @tap="linkto">
                 <text class="text-grey">卡密兑换</text>
                 <image class="arrow" src="/static/images/ic_arrow_r.png"></image>
@@ -66,6 +66,10 @@
             <view class="item" data-url="/pages/commission/index" @tap="linkto" v-if="userinfo.is_commission">
                 <text class="text-grey">推广中心</text>
                 <image class="arrow" src="/static/images/ic_arrow_r.png"></image>
+            </view>
+            <view class="item" data-url="/pages/knowledgeBase/list?type=help" @tap="linkto">
+              <text class="text-grey">知识库</text>
+              <image class="arrow" src="/static/images/ic_arrow_r.png"></image>
             </view>
             <view class="item" data-url="/pages/commission/apply" @tap="linkto" v-if="userinfo.commission_is_open && !userinfo.is_commission">
                 <text class="text-grey">申请推广员</text>
@@ -172,6 +176,7 @@ export default {
         },
 
         linkto(e) {
+          // debugger
             const url = e.currentTarget.dataset.url;
             uni.navigateTo({
                 url: url

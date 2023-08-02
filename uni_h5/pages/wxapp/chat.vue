@@ -9,7 +9,7 @@
 				:scroll-top="scrollTop">
 				<view class="list" v-if="lists && lists.length > 0">
 					<block v-for="(item, index) in lists" :key="index">
-						<view class="message" :data-index="index" v-if="item.user == 'AI'" style="background: #f7f7f8">
+						<view class="message" :data-index="index" v-if="item.user == 'AI'" style="background: #f2f2f2">
 							<view class="avatar">
 								<img src="/static/img/ic_ai.png" />
 							</view>
@@ -31,7 +31,7 @@
 							</view>
 						</view>
 					</block>
-					<view class="message" style="background: #f7f7f8" v-if="writing || writingText">
+					<view class="message" style="background: #f2f2f2" v-if="writing || writingText">
 						<view class="avatar">
 							<img src="/static/img/ic_ai.png" />
 						</view>
@@ -425,7 +425,7 @@
 							_this.getHistoryMsg()
 							_this.getBalanceModel4()
 						}
-						
+
 					})
 				} else {
 					this.setData({

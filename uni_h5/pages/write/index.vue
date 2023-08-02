@@ -105,11 +105,11 @@ export default {
 				this.setData({
 					topicList: res.data
 				});
-				
+
 				this.calcTabWidth()
 			});
         },
-		
+
 		calcTabWidth() {
 			const topicList = this.topicList
 			var tabWidth = 160, len = 0;
@@ -317,7 +317,7 @@ page {
 }
 
 .prompt-item {
-    background: #f7f7f8;
+    background: #f2f2f2;
     padding: 20rpx 30rpx;
     border-radius: 14rpx;
     margin: 0 20rpx 20rpx 0;
@@ -365,7 +365,7 @@ page {
 	bottom: 0;
 	padding: 10rpx 30rpx;
 	box-sizing: border-box;
-	background: #f7f7f8;
+	background: #f2f2f2;
 }
 .prompt-item .ops .op-item {
     display: flex;

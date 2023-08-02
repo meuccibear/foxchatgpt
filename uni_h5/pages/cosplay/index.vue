@@ -31,11 +31,11 @@
 				</view>
 			</view>
 		</view>
-		
+
         <view class="empty" v-if="!allRoles || allRoles.length == 0">
             <image src="/static/images/nodata.png"></image>
         </view>
-		
+
 		<view class="nomore" v-else>没有更多了~</view>
     </view>
 </template>
@@ -109,7 +109,7 @@ page {
 }
 
 .role-item {
-    background: #f7f7f8;
+    background: #f2f2f2;
     padding: 20rpx 20rpx;
     border-radius: 14rpx;
     margin: 0 20rpx 20rpx 0;
