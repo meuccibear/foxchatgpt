@@ -78,10 +78,9 @@
 import { mapGetters } from 'vuex'
 import { getGoodsList, createOrder, checkPay } from '@/api/order'
 import vueQr from 'vue-qr'
-import Text from "@/views/index/components/Text.vue";
 
 export default {
-  components: {Text, vueQr},
+  components: {vueQr},
   props: {
     payType: {
       type: String,
@@ -293,9 +292,10 @@ export default {
 .box-pay {
   padding: 40px 60px;
   box-sizing: border-box;
+  min-height: 300px;
+  background: #fff;
 }
 .goods-list {
-
   .goods {
     background: #f7f7f9;
     width: 150px;

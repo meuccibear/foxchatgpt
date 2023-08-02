@@ -15,6 +15,14 @@ export function getSystemInfo(data) {
   })
 }
 
+export function getUserBalance() {
+  return request({
+    url: '/user/getBalance',
+    method: 'get',
+    hideLoading: true
+  })
+}
+
 export function getInfo() {
   return request({
     url: '/user/info',

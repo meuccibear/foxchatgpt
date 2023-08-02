@@ -166,14 +166,7 @@
           </el-scrollbar>
         </div>
       </div>
-      <div v-if="module === 'draw'" class="module-draw">
-        <div class="module-body">
-          <el-scrollbar wrap-class="scrollbar-wrapper">
-            <drawSetting ref="drawSetting"></drawSetting>
-          </el-scrollbar>
-        </div>
-      </div>
-      <div class="module-footer">
+      <div class="module-footer" v-if="module !== 'draw'" >
         <div class="box-vip" @click="showPay('vip')">
           <img class="icon" src="@/assets/ic_vip.png" />
           <div class="title" v-if="vip_expire_time">已开通会员</div>
@@ -248,9 +241,10 @@ export default {
       if (this.module === module) {
         return
       }
+      var activeId = 0
       if (module === 'chat') {
         if (this.activeGroupId) {
-          this.$emit('changeGroupId', this.activeGroupId)
+          activeId = this.activeGroupId
         }
       } else if (module === 'write') {
         if (!this.writeTopicList || this.writeTopicList.length === 0) {
@@ -258,7 +252,7 @@ export default {
           this.getAllPrompt()
         }
         if (this.activePromptId) {
-          this.$emit('changePromptId', this.activePromptId)
+          activeId = this.activePromptId
         }
       } else if (module === 'cosplay') {
         if (!this.cosplayRoleList || this.cosplayRoleList.length === 0) {
@@ -266,20 +260,10 @@ export default {
           this.getAllRoles()
         }
         if (this.activeRoleId) {
-          this.$emit('changeRoleId', this.activeRoleId)
-        }
-      } else if (module === 'draw') {
-        this.$message.warning('PC端绘画即将上线')
-        return false
-      } else if (module === 'knowledge'){
-        if (!this.cosplayRoleList || this.cosplayRoleList.length === 0) {
-          this.activeRoleId = 0
-          this.getAllRoles()
-        }
-        if (this.activeRoleId) {
-          this.$emit('changeRoleId', this.activeRoleId)
+          activeId = this.activeRoleId
         }
       }
+      this.$emit('switchModule', module, activeId);
       this.module = module
       this.searchKeyword = ''
       this.filterList()
@@ -321,13 +305,12 @@ export default {
           }
         })
 
-        console.log('ss', roleList)
         this.cosplayRoleList = roleList
       }
     },
     changeGroup(group_id) {
       this.activeGroupId = group_id
-      this.$emit('changeGroupId', group_id)
+      this.$emit('switchModule', 'chat', group_id)
     },
     getGroupList(change = false) {
       getGroupList({ page: this.page, pagesize: this.pagesize }).then(res => {
@@ -485,7 +468,7 @@ export default {
     },
     changePrompt(prompt_id) {
       this.activePromptId = prompt_id
-      this.$emit('changePromptId', prompt_id)
+      this.$emit('switchModule', 'write', prompt_id)
     },
     getAllRoles() {
       getAllRoles().then(res => {
@@ -494,7 +477,7 @@ export default {
     },
     changeRole(role_id) {
       this.activeRoleId = role_id
-      this.$emit('changeRoleId', role_id)
+      this.$emit('switchModule', 'cosplay', role_id)
     },
     toDoc(type) {
       let routeData = this.$router.resolve({ name: 'Doc', query: { type: type } })
@@ -502,10 +485,7 @@ export default {
     },
     showPay(type) {
       this.$emit('showPay', type)
-    },
-    getDrawSetting() {
-      return this.$refs.drawSetting.getSetting()
-    },
+    }
   }
 }
 </script>

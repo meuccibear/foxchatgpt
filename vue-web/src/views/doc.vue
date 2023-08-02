@@ -106,7 +106,6 @@ export default {
                 this.articleId = this.articleTree[0]['son'][0]['id']
                 this.getArticle()
               }
-              console.log('article', this.articleId)
               key += this.articleId;
             }
             this.$refs.tree.setCurrentKey(key)

@@ -77,15 +77,8 @@
           @click="sendText"
         />
       </div>
-      <div class="copyright">
-        <div v-if="copyright || icp || gongan">
-          <a @click="toDoc('legal')">{{ copyright }}</a>
-          <a v-if="gongan" :href="'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=' + gongan.replace(/[^\d]/g, '')" target="_blank" style="margin-left: 15px;">
-            <img src="@/assets/gongan.png" style="margin-right: 3px; position: relative; top: 2px; height: 14px;">{{ gongan }}
-          </a>
-          <a v-if="icp" href="https://beian.miit.gov.cn/" target="_blank" style="margin-left: 15px;">{{ icp }}</a>
-        </div>
-      </div>
+
+      <Copyright />
     </div>
   </div>
 </template>
@@ -96,8 +89,9 @@ import { getChatHistoryMsg } from '@/api/chat'
 import { getWriteHistoryMsg, getPrompt } from '@/api/write'
 import { getCosplayHistoryMsg, getRole } from '@/api/cosplay'
 import { getToken, getSiteCode } from '@/utils/auth'
-import TextComponent from './Text'
+import TextComponent from './Message/Text'
 import Welcome from './Welcome'
+import Copyright from './Copyright'
 
 import 'katex/dist/katex.min.css'
 import '@/styles/lib/tailwind.css'
@@ -109,7 +103,7 @@ var textOutputSi = 0
 
 export default {
   name: 'Main',
-  components: { TextComponent, Welcome },
+  components: { TextComponent, Welcome, Copyright },
   data() {
     return {
       module: 'chat',
@@ -132,10 +126,6 @@ export default {
       'avatar',
       'nickname',
       'page_title',
-      'copyright',
-      'copyright_link',
-      'icp',
-      'gongan',
       'hasModel4',
       'model4Name'
     ]),
@@ -234,7 +224,7 @@ export default {
           this.writingText = ''
           this.scrollBottom()
         }
-      }, 50)
+      }, 35)
 
       while (!done) {
         this.scrollBottom()
@@ -256,7 +246,7 @@ export default {
                   this.$message.error(error)
                 }, 500)
               } else if (error.indexOf('请充值') !== -1) {
-                this.$emit('showUserInfo')
+                this.$emit('showPay', 'vip')
                 setTimeout(() => {
                   this.$message.error(error)
                 }, 500)
@@ -287,7 +277,6 @@ export default {
         this.$message.warning('输出中，请稍等')
         return;
       }
-      console.log('name', name)
       if (name === 'gpt-4') {
         this.$confirm(this.model4Name + '功能更强大，但成本很高，所以单独计费，可在个人中心查看余额或充值', '提示', {
           confirmButtonText: '我已知悉，继续使用',
