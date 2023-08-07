@@ -14,6 +14,7 @@ util.request = function (option) {
 
     // 是否显示loading
     option.loading = typeof option.loading != 'undefined' ? option.loading : true;
+    // console.log(option.url, option.loading)
     if (option.loading) {
         uni.showNavigationBarLoading();
         uni.showLoading({
@@ -137,7 +138,7 @@ util.login = function () {
     var tuid = uni.getStorageSync('tuid')
 	var url = '/web.php/login/h5?sitecode=' + sitecode + '&tuid=' + tuid + '&from=' + encodeURIComponent(window.location.href)
     console.log('url:', url)
-	// window.location.href = url
+	window.location.href = url
 };
 
 /**

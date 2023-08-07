@@ -97,7 +97,7 @@
 			 * 关闭窗口
 			 */
 			close() {
-				if(this.beforeClose) return
+				if (this.beforeClose) return
 				this.popup.close()
 			}
 		}

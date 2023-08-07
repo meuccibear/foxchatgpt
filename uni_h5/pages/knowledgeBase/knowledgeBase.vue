@@ -3,13 +3,10 @@
     <view class="panel">
       <!-- 基础用法，不包含校验规则 -->
       <uni-forms ref="baseForm" :model="baseFormData" labelWidth="80px">
-        <uni-easyinput v-model="baseFormData.name" placeholder="知识库名称"/>
-        <uni-easyinput type="textarea" v-model="baseFormData.introduction" placeholder="说明"/>
-        <!--          <uni-zp-icons type="upload" size="18" color="#999" @upload="upload"/>-->
-
+        <uni-easyinput v-model="baseFormData.repo_name" placeholder="知识库名称"/>
+        <uni-easyinput type="textarea" v-model="baseFormData.repo_desc" placeholder="说明"/>
       </uni-forms>
-      <view class="example-body">
-        <uni-file-picker limit="5" file-mediatype="all" title="最多选择5个文件" style="padding-bottom:10px;"></uni-file-picker>
+      <view class="example-body" v-if="baseFormData.repo_id">
         <view class="uni-file-picker__header" >
           <text class="file-title">已上传文件：</text>
         </view>
@@ -17,13 +14,12 @@
           :list-styles="listStyles"
           :files-list="filesList"
           :showType="'list'"
-          :delIcon="false"
           @delFile="delFile">
         </uni-upload-file>
       </view>
     </view>
     <view class="button-content">
-      <button type="primary" @click="submit('baseForm')">提交</button>
+      <button type="primary" style="background: #04babe;" @click="submit('baseForm')">提交</button>
     </view>
   </view>
 </template>
@@ -40,8 +36,9 @@ export default {
     return {
       // 基础表单数据
       baseFormData: {
-        name: '',
-        introduction: ''
+        repo_id: undefined,
+        repo_name: '',
+        repo_desc: ''
       },
       listStyles: {
         // 是否显示边框
@@ -51,121 +48,71 @@ export default {
         // 线条样式
         borderStyle: {}
       },
-      filesList: [
-        {
-          "name": "java_error_in_idea.hprof1",
-          "uuid": 1690196966927
-        },
-        {
-          "name": "java_error_in_idea.hprof",
-          "uuid": 1690196966927
-        },
-        {
-          "name": "java_error_in_idea.hprof",
-          "uuid": 1690196966927
-        },
-        {
-          "name": "java_error_in_idea.hprof",
-          "uuid": 1690196966927
-        },
-        {
-          "name": "java_error_in_idea.hprof",
-          "uuid": 1690196966927
-        },
-        {
-          "name": "java_error_in_idea.hprof",
-          "uuid": 1690196966927
-        },
-        {
-          "name": "java_error_in_idea.hprof",
-          "uuid": 1690196966927
-        },
-        {
-          "name": "java_error_in_idea.hprof",
-          "uuid": 1690196966927
-        },
-        {
-          "name": "java_error_in_idea.hprof",
-          "uuid": 1690196966927
-        },
-        {
-          "name": "java_error_in_idea.hprof",
-          "uuid": 1690196966927
-        },
-        {
-          "name": "java_error_in_idea.hprof",
-          "uuid": 1690196966927
-        }
-      ]
+      filesList: []
     }
   },
   onLoad(options) {
-    var type = options.type
-    var title = '文章内容'
-    switch (options.type) {
-      case 'about':
-        title = '关于我们';
-        break;
-      case 'kefu':
-        title = '联系客服';
-        break;
-      case 'privacy':
-        title = '隐私政策';
-        break;
-      case 'service':
-        title = '服务协议';
-        break;
-      case 'notice':
-        title = '通知公告';
-        break;
-      case 'legal':
-        title = '免责声明';
-        break;
-      case 'commission':
-        title = '推广协议';
-        break;
+    if (options.id) {
+      app.globalData.util.request({
+        url: '/Retrieval/getLibs',
+        method: 'GET',
+        data: {
+          repo_id: options.id
+        }
+      }).then((res) => {
+        this.setData({
+          baseFormData: res.data
+        });
+      });
+      app.globalData.util.request({
+        url: '/Retrieval/getFileListForLib',
+        method: 'GET',
+        data: {
+          repo_id: options.id
+        }
+      }).then((res) => {
+        let files = []
+        let itemData = undefined
+        // for(let item in res.data) {
+        //   itemData = res.data[item]
+        //   files.push({
+        //     'uuid': itemData.file_id,
+        //     'name': itemData.file_name
+        //   })
+        // }
+        this.setData({
+          filesList: res.data
+        });
+      });
+    } else {
+      console.log('')
     }
-    uni.setNavigationBarTitle({
-      title: title
-    })
-    var data = {
-      type: type
-    }
-    if (type == 'help' && options.id) {
-      data.id = options.id
-    }
-    // app.globalData.util.request({
-    //   url: '/article/getArticle',
-    //   data: data
-    // }).then((res) => {
-    //   if (res.data.title) {
-    //     uni.setNavigationBarTitle({
-    //       title: res.data.title
-    //     })
-    //   }
-    //   this.setData({
-    //     content: res.data.content
-    //   });
-    // });
   },
   methods: {
     submit(ref) {
-      console.log(this.baseFormData);
       this.$refs[ref].validate().then(res => {
-        console.log('success', res);
-        uni.showToast({
-          title: `校验通过`
+        let status = this.baseFormData.repo_id ? true : false
+        const $this = this
+        app.globalData.util.request({
+          url: status ? '/Retrieval/updateLib' : '/Retrieval/addLib',
+          data: this.baseFormData
         })
-        // this.goBackPage(1)
+        .then((res) => {
+          app.globalData.util.message(res.message, 'error', function () {
+            if (!status) {
+              $this.goBackPage('isRefresh')
+            }
+          });
+        });
       }).catch(err => {
         console.log('err', err);
       })
     },
-    goBackPage(data) {
-      uni.$emit('item', data)
-      uni.navigateBack();
-    },
-    upload() {
+    goBackPage(key) {
+      uni.$emit(key)
+      uni.navigateBack({
+        delta: 1
+      });
     },
     /**
      * 删除文件

@@ -19,11 +19,11 @@
             <!--          <view class="title">请选择知识库</view>-->
             <checkbox-group v-model="val" class="uni-list" @change="checkboxChange">
               <scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" @scroll="scroll">
-                <label class="uni-list-cell uni-list-cell-pd scroll-view-item" v-for="item in checkboxData" :key="item.name">
+                <label class="uni-list-cell uni-list-cell-pd scroll-view-item" v-for="item in checkboxData" :key="item.repo_name">
                   <view>
-                    <checkbox :value="item.value" :checked="item.checked"></checkbox>
+                    <checkbox :value="item.repo_id" :checked="item.checked"></checkbox>
                   </view>
-                  <view>{{ item.name }}</view>
+                  <view>{{ item.repo_name }}</view>
                 </label>
               </scroll-view>
             </checkbox-group>
@@ -200,7 +200,7 @@ export default {
       this.updateData(e.detail.value, true)
     },
     updateData: function (values, clean) {
-      if(clean){
+      if (clean){
         this.checkboxData.forEach(function (data) {
           delete data.checked
         })
@@ -208,7 +208,7 @@ export default {
 
       for (let data of values) {
         for (let data1 of this.checkboxData) {
-          if (data == data1.value) {
+          if (data == data1.repo_id) {
             data1.checked = 'true'
           }
         }

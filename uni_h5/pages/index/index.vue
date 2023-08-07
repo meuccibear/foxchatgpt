@@ -6,7 +6,8 @@
 				<view class="tab-item" :class="{active: model === 'model4'}" @tap="switchModel('model4')">{{model4Name}}</view>
 			</view>
 			<scroll-view class="box-msg-list" :scroll-x="false" :scroll-y="true" :scroll-with-animation="false"
-				:scroll-top="scrollTop">
+				:scroll-top="scrollTop"
+        :style="'bottom: ' + (inputShow ? '316rpx' : '102rpx') + ';'">
 				<view class="list" v-if="lists && lists.length > 0">
 					<block v-for="(item, index) in lists" :key="index">
 						<view class="message" :data-index="index" v-if="item.user == 'AI'" style="background: #f2f2f2">
@@ -49,7 +50,6 @@
 			</scroll-view>
 
       <view class="box-input" :style="'bottom: ' + (inputShow ? '0' : '-204rpx') + ';'">
-<!--			<view class="box-input">-->
         <view class="tools">
           <view
               v-for="(item, index) in langs"
@@ -95,7 +95,7 @@
 </template>
 
 <script>
-	const app = getApp();
+  const app = getApp();
 
 	import TextComponent from '../../components/message/text'
 	import Welcome from '../../components/welcome/index'
@@ -148,10 +148,25 @@
         inputShow: true,
         knowledgeBase: [
           {
-            value: 'mvdbb96ca0b7e3ef4c1b97e7f68722f8',
-            name: '默认'
+            repo_id: 'mvdb274eefbae618428585fc8f6facc1',
+            repo_name: "\u540c\u4ec1\u5802\u77e5\u8bc6\u5e93",
+            repo_desc: "\u548c\u540c\u4ec1\u5802\u53ca\u5176\u4ea7\u54c1\u76f8\u5173\u7684\u5185\u5bb9"
           }
         ]
+        /**
+         * [
+         *         {
+         *             "repo_id":"mvdb274eefbae618428585fc8f6facc1",
+         *             "repo_name":"\u540c\u4ec1\u5802\u77e5\u8bc6\u5e93",
+         *             "repo_desc":"\u548c\u540c\u4ec1\u5802\u53ca\u5176\u4ea7\u54c1\u76f8\u5173\u7684\u5185\u5bb9"
+         *         },
+         *         {
+         *             "repo_id":"mvdbcff53daea9be4592841855e858cc",
+         *             "repo_name":"\u79c1\u57df\u5f15\u6d41\u4e0e\u793e\u7fa4\u8425\u9500\u77e5\u8bc6\u5e93",
+         *             "repo_desc":"\u82b1\u7237\u7684\u79c1\u57df\u5f15\u6d41\u4e0e\u793e\u7fa4\u8425\u9500\uff0c\u76f4\u64ad\u6280\u5de7\u7b49\u6570\u5b57\u5a92\u4f53\u8425\u9500\u76f8\u5173\u5185\u5bb9"
+         *         }
+         *     ]
+         */
       //   ["internetsearch","repodb:mvdbb96ca0b7e3ef4c1b97e7f68722f8","repodb:mvdbb96ca0b7e3ef4c1b97e7f685555"]
 			};
 		},
@@ -199,6 +214,18 @@
 				if (this.writing) {
 					return
 				}
+        console.log(this.userCache)
+        let to = []
+        for (let item in this.userCache.lang) {
+          if (this.userCache.lang[item] === this.langs[0]) {
+            to.push('internetsearch')
+          } else {
+            for (let itemSon in this.userCache.knowledgeBaseCheckData) {
+              to.push('repodb:' + this.userCache.knowledgeBaseCheckData[itemSon])
+            }
+          }
+        }
+
 				const message = this.trim(this.message)
 				if (!message) {
 					app.globalData.util.message('请输入你的问题')
@@ -226,7 +253,8 @@
 				const url = this.siteroot + '/web.php/chat/sendText'
 				const data = {
 					message: message,
-					model: this.model
+					model: this.model,
+          tools: to
 				}
 				const response = await fetch(url, {
 					method: 'POST',
@@ -356,7 +384,8 @@
         }, 300)
       },
       dialogInputConfirm(val) {
-        if(val){
+        if (val){
+          console.log('knowledgeBase', this.knowledgeBase)
           this.userCache.knowledgeBaseCheckData = val
           this.cache()
           this.changeLang()
@@ -372,7 +401,16 @@
       changeLang(lang) {
         if (lang) {
           if (this.langs[1] === lang) {
-            this.$refs.inputDialog.open()
+            app.globalData.util.request({
+              url: '/Retrieval/getAllLibs',
+              method: 'GET'
+            })
+            .then((res) => {
+              this.setData({
+                knowledgeBase: res.data
+              })
+              this.$refs.inputDialog.open()
+            })
             return
           }
           const index = this.userCache.lang.indexOf(lang)
@@ -385,12 +423,12 @@
         } else {
           const lan = this.langs[1]
           const index = this.userCache.lang.indexOf(lan)
-          if(this.userCache.knowledgeBaseCheckData.length != 0){
-            if(index === -1){
+          if (this.userCache.knowledgeBaseCheckData.length != 0){
+            if (index === -1){
               console.log('添加了')
               this.userCache.lang.push(lan)
             }
-          } else if(index > -1) {
+          } else if (index > -1) {
             this.userCache.lang.splice(index, 1)
           }
         }
@@ -550,7 +588,7 @@
 					app.globalData.util.message('输出中，请稍等')
 					return;
 				}
-				if(name == 'model4') {
+				if (name == 'model4') {
 					var _this = this
 					uni.showModal({
 						title: '提示',
@@ -834,13 +872,26 @@
 	}
 
 	.box-msg-list {
-		width: 100%;
-		height: 100%;
-		top: 0;
-		bottom: 132rpx;
-		left: 0;
-		box-sizing: border-box;
-		overflow: hidden;
+		/*width: 100%;*/
+		/*height: 100%;*/
+		/*top: 0;*/
+		/*bottom: 132rpx;*/
+		/*left: 0;*/
+		/*box-sizing: border-box;*/
+		/*overflow: hidden;*/
+
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    overflow-y: scroll;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 316px;
+    background: #fff;
+    z-index: 1;
+    transition: all 0.3s;
 	}
 
 	.list {

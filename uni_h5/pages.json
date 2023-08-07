@@ -259,6 +259,12 @@
 				"selectedIconPath": "static/images/tabbar/ic_draw_active.png"
 			},
 			{
+				"pagePath": "pages/knowledgeBase/list",
+				"text": "知识库",
+				"iconPath": "static/images/tabbar/ic_knowledge_base.png",
+				"selectedIconPath": "static/images/tabbar/ic_knowledge_base_active.png"
+			},
+			{
 				"pagePath": "pages/user/index",
 				"text": "我的",
 				"iconPath": "static/images/tabbar/ic_user.png",

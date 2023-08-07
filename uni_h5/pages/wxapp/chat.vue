@@ -410,7 +410,7 @@
 					app.globalData.util.message('输出中，请稍等')
 					return;
 				}
-				if(name == 'model4') {
+				if (name == 'model4') {
 					var _this = this
 					uni.showModal({
 						title: '提示',

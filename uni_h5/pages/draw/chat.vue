@@ -28,7 +28,7 @@
 								></imageComponent>
 							</view>
 						</view>
-						
+
 					</view>
 				</view>
 			</scroll-view>
@@ -97,10 +97,10 @@
 						return
 					}
 				}
-				
+
 				this.message = ''
 				this.scrollToBottom()
-				
+
 				app.globalData.util
 					.request({
 						url: '/draw/draw',
@@ -114,15 +114,15 @@
 							draw_id: res.data.draw_id,
 							message: message
 						});
-						
+
 						this.startLoopResult(res.data.draw_id);
-						
+
 						setTimeout(() => {
 							this.scrollToBottom()
 						}, 500)
 					})
 					.catch(res => {
-						if(res.message.indexOf('请充值') !== -1) {
+						if (res.message.indexOf('请充值') !== -1) {
 							app.globalData.util.message(res.message, 'error', function() {
 								uni.navigateTo({
 									url: '/pages/pay/draw'
@@ -131,7 +131,7 @@
 						}
 					})
 			},
-			
+
 			startLoopResult(draw_id) {
 				var si = setInterval(() => {
 					app.globalData.util
@@ -145,15 +145,15 @@
 						.then(res => {
 							var lists = this.lists
 							lists.forEach((item, index) => {
-								if(item.draw_id == draw_id) {
+								if (item.draw_id == draw_id) {
 									var state = res.data.state
 									lists[index].state = state
-									if(state != 0) {
+									if (state != 0) {
 										clearInterval(si)
-										if(state == 1) {
+										if (state == 1) {
 											lists[index].response = res.data.images
 										}
-										else if(state == 2) {
+										else if (state == 2) {
 											lists[index].errmsg = res.data.message
 										}
 										this.lists = lists
@@ -178,7 +178,7 @@
 					.then((res) => {
 						var lists = this.lists
 						lists.forEach((item, index) => {
-							if(item.draw_id == draw_id) {
+							if (item.draw_id == draw_id) {
 								lists[index].state = 0
 								lists[index].errmsg = ''
 								lists[index].response = ''
@@ -205,7 +205,7 @@
 								lists: lists
 							});
 							lists.forEach((item, index) => {
-								if(item.state == 0) {
+								if (item.state == 0) {
 									this.startLoopResult(item.draw_id);
 								}
 							})
@@ -240,11 +240,11 @@
 				document.execCommand("copy")
 				textarea.remove()
 			},
-			
+
 			previewImage(src) {
 				var urls = []
 				this.lists.forEach((item, index) => {
-					if(item.state == 1) {
+					if (item.state == 1) {
 						item.response.forEach((img, idx) => {
 							urls.push(img)
 						})
@@ -263,7 +263,7 @@
 					return ''
 				}
 			},
-			
+
 			toEdit(message) {
 				this.message = message
 			}
@@ -283,7 +283,7 @@
 		border-top: 1px solid #d8d8e2;
 		background: #f6fafc;
 	}
-	
+
 	.box-input .input {
 		width: 690rpx;
 		margin: 0 30rpx;
@@ -292,14 +292,14 @@
 		box-shadow: 0 0 12rpx rgba(0, 0, 0, 0.1);
 		background: #fefefe;
 	}
-	
+
 	.box-input .input textarea {
 		width: 580rpx;
 		padding: 20rpx 10rpx 20rpx 20rpx;
 		border-radius: 10rpx;
 		line-height: 40rpx;
 	}
-	
+
 	.box-input .input .btn-send {
 		position: absolute;
 		right: 0;
@@ -315,15 +315,15 @@
 		justify-content: center;
 		z-index: 9;
 	}
-	
+
 	.box-input .input .btn-send::after {
 		display: none;
 	}
-	
+
 	.box-input .input .btn-send:active {
 		background: #f2f2f2;
 	}
-	
+
 	.box-input .input .btn-send image {
 		width: 40rpx;
 		height: 40rpx;
@@ -358,7 +358,7 @@
 		padding-bottom: 40rpx;
 		box-sizing: border-box;
 	}
-	
+
 	.message-group {
 		background: #fff;
 		margin: 40rpx 30rpx 0 30rpx;
@@ -371,7 +371,7 @@
 		justify-content: flex-start;
 		padding: 40rpx 40rpx;
 	}
-	
+
 	.message.user {
 		border-bottom: 2rpx solid #f6f6f6;
 	}
@@ -410,7 +410,7 @@
 		width: 48rpx;
 		height: 48rpx;
 	}
-	
+
 	.account {
 		margin: 20rpx 30rpx;
 		padding: 16rpx 24rpx 16rpx 24rpx;

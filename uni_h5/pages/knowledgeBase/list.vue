@@ -8,22 +8,22 @@
       >
         <view slot="context" class="slot-content">
           <view slot="">
-            <text class="uni-body uni-mt-5 title" >{{item.name}}</text>
+            <text class="uni-body uni-mt-5 title" >{{item.repo_name}}</text>
           </view>
           <view slot="" class="desc">
-            <text class="uni-body uni-mt-5">{{item.desc}}</text>
+            <text class="uni-body uni-mt-5">{{item.repo_desc}}</text>
           </view>
         </view>
         <view slot="actions" class="card-actions">
-          <!--          <view class="card-actions-item" @click="actionsClick('分享')">-->
-          <!--            <uni-icons type="redo" size="18" color="#999"></uni-icons>-->
-          <!--            <text class="card-actions-item-text">分享</text>-->
-          <!--          </view>-->
-          <view class="card-actions-item" data-type="edit" :data-id="item.id" @tap="actionClick">
+          <view class="card-actions-item" data-type="addFile" :data-id="item.repo_id" @tap="actionClick">
+            <uni-icons type="folder-add" size="18" color="#999"></uni-icons>
+            <text class="card-actions-item-text">添加文件</text>
+          </view>
+          <view class="card-actions-item" data-type="edit" :data-id="item.repo_id" @tap="actionClick">
             <uni-icons type="compose" size="18" color="#999"></uni-icons>
             <text class="card-actions-item-text">编辑</text>
           </view>
-          <view class="card-actions-item" data-type="delete" :data-id="item.id" @tap="actionClick">
+          <view class="card-actions-item" data-type="delete" :data-id="item.repo_id" @tap="actionClick">
             <uni-icons type="trash" size="18" color="#999"></uni-icons>
             <text class="card-actions-item-text">删除</text>
           </view>
@@ -49,7 +49,6 @@ export default {
   data() {
     return {
       title: 'nav-button',
-      type: 'help',
       list: [],
       swipeList: [
         {
@@ -98,10 +97,11 @@ export default {
       pattern: {
         color: '#7A7E83',
         backgroundColor: '#fff',
-        selectedColor: '#007AFF',
-        buttonColor: '#007AFF',
+        selectedColor: '#04babe',
+        buttonColor: '#04babe',
         iconColor: '#fff'
-      }
+      },
+      loading: true
     };
   },
   components: {
@@ -112,53 +112,7 @@ export default {
     this.setData({
       type: type
     })
-    if (type == 'help') {
-      uni.setNavigationBarTitle({
-        title: '使用教程'
-      })
-    }
-    // app.globalData.util.request({
-    // 	url: '/article/getList',
-    // 	data: {
-    // 		type: type
-    // 	}
-    // }).then(res => {
-    //   res = {"errno":0,"message":"","data":{"list":[{"id":7,"title":"\u767b\u5f55\u5e73\u53f0"},{"id":9,"title":"\u5bf9\u8bdd\u6a21\u5757"},{"id":10,"title":"\u521b\u4f5c\u6a21\u5757"},{"id":11,"title":"\u6a21\u62df\u6a21\u5757"},{"id":12,"title":"\u7ed8\u753b\u6a21\u5757"}]}}
-    //   console.log(res)
-    // 	this.setData({
-    // 		list: res.data.list
-    // 	})
-    // })
-    const res = {
-      "errno": 0,
-      "message": "",
-      "data": {
-        "list": [
-          {
-            id: 1,
-            name: '知识库1',
-            desc: '新塘镇陈家林路翡翠绿洲森林半岛6期73栋904',
-            def: "额外"
-          }, {
-            id: 2,
-            name: '知识库1',
-            desc: '说明'
-          }, {
-            id: 3,
-            name: '知识库1',
-            desc: '说明'
-          }, {
-            id: 4,
-            name: '知识库1',
-            desc: '说明'
-          }
-        ]
-      }
-    }
-    console.log(res)
-    this.setData({
-      list: res.data.list
-    })
+    this.init()
   },
   onShow() {
     uni.$on('item', (obj) => {
@@ -170,18 +124,106 @@ export default {
     })
   },
   methods: {
+    init() {
+      app.globalData.util.request({
+        url: '/Retrieval/getAllLibs',
+        method: 'GET'
+      }).then(res => {
+        this.setData({
+          list: res.data
+        })
+      })
+    },
     actionClick(e) {
       const id = e.currentTarget.dataset.id
       const type = e.currentTarget.dataset.type
-      console.log('actionClick', e, e.currentTarget.dataset.id)
       switch (type) {
         case 'edit':
           uni.navigateTo({
-            url: '/pages/knowledgeBase/knowledgeBase?type=' + this.type + '&id=' + id
+            url: '/pages/knowledgeBase/knowledgeBase?id=' + id
           })
           break
         case 'delete':
-
+          app.globalData.util.request({
+            url: '/Retrieval/delLib',
+            data: { repo_id : id}
+          })
+          .then((res) => {
+            // this.goBackPage(1)
+            app.globalData.util.message(res.message, 'error', this.init);
+          });
+          // uni.showToast({
+          //   title: `校验通过`
+          // })
+          // this.goBackPage(1)
+          break
+        case 'addFile':
+          uni.showNavigationBarLoading();
+          uni.showLoading({
+            title: '加载中'
+          });
+          uni.chooseFile({
+            count: 1,
+            extension: ['docx', 'txt', 'pdf', 'doc'],
+            success: (res) => {
+              console.log('选择文件成功，临时路径为', res.tempFilePaths[0])
+              var imageSrc = res.tempFilePaths[0]
+              uni.uploadFile({
+                url: 'http://165.154.36.236:8010/uploadfiles',
+                filePath: imageSrc,
+                fileType: 'image',
+                formData: {
+                  'repoid': id
+                },
+                name: 'files',
+                success: (res) => {
+                  console.log('uploadImage success, res is:', res)
+                  uni.showToast({
+                    title: '上传成功',
+                    icon: 'success',
+                    duration: 1000
+                  })
+                  this.imageSrc = imageSrc
+                },
+                fail: (err) => {
+                  console.log('uploadImage fail', err);
+                  uni.showModal({
+                    content: err.errMsg,
+                    showCancel: false
+                  });
+                },
+                complete: function (res) {
+                  uni.hideLoading();
+                  uni.hideNavigationBarLoading();
+                }
+              });
+            },
+            fail: (err) => {
+              console.log('chooseImage fail', err)
+              // #ifdef MP
+              uni.getSetting({
+                success: (res) => {
+                  let authStatus = res.authSetting['scope.album'];
+                  if (!authStatus) {
+                    uni.showModal({
+                      title: '授权失败',
+                      content: 'Hello uni-app需要从您的相册获取图片，请在设置界面打开相关权限',
+                      success: (res) => {
+                        if (res.confirm) {
+                          uni.openSetting()
+                        }
+                      }
+                    })
+                  }
+                }
+              })
+              // #endif
+            },
+            complete: function (res) {
+              uni.hideLoading();
+              uni.hideNavigationBarLoading();
+            }
+          })
           break
       }
     },
@@ -280,10 +322,13 @@ export default {
       })
     },
     fabClick() {
-      uni.showToast({
-        title: '点击了悬浮按钮',
-        icon: 'none'
+      uni.navigateTo({
+        url: '/pages/knowledgeBase/knowledgeBase'
       })
+      // uni.showToast({
+      //   title: '点击了悬浮按钮',
+      //   icon: 'none'
+      // })
     }
   }
 };

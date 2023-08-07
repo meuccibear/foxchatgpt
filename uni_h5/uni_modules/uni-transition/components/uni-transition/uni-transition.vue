@@ -134,7 +134,7 @@ export default {
 			if (!this.animation) return
 			for (let i in obj) {
 				try {
-					if(typeof obj[i] === 'object'){
+					if (typeof obj[i] === 'object'){
 						this.animation[i](...obj[i])
 					}else{
 						this.animation[i](obj[i])

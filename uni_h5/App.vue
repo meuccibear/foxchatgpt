@@ -19,13 +19,13 @@
 
 			// 站点sitecode
 			var search = window.location.search
-			if(search && search.indexOf('?') != -1) {
+			if (search && search.indexOf('?') != -1) {
 				var sitecode = '';
-				if(search.length == 5) {
+				if (search.length == 5) {
 					sitecode = search.substr(1, 4)
 				} else if (search.length > 5) {
 					var char = search.charAt(5)
-					if(char == '&' || char == '#' || char == '=' || char == '/') {
+					if (char == '&' || char == '#' || char == '=' || char == '/') {
 						sitecode = search.substr(1, 4)
 					}
 				}

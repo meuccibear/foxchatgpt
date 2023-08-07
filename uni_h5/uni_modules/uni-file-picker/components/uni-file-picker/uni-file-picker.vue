@@ -294,7 +294,7 @@
 				const newData =  async (v) => {
 					const reg = /cloud:\/\/([\w.]+\/?)\S*/
 					let url = ''
-					if(v.fileID){
+					if (v.fileID){
 						url = v.fileID
 					}else{
 						url = v.url
@@ -303,7 +303,7 @@
 						v.fileID = url
 						v.url = await this.getTempFileURL(url)
 					}
-					if(v.url) v.path = v.url
+					if (v.url) v.path = v.url
 					return v
 				}
 				if (this.returnType === 'object') {

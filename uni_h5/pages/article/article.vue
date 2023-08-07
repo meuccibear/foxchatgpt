@@ -47,7 +47,7 @@ export default {
 		var data = {
 		  type: type
 		}
-		if(type == 'help' && options.id) {
+		if (type == 'help' && options.id) {
 			data.id = options.id
 		}
         app.globalData.util
@@ -56,7 +56,7 @@ export default {
 				data: data
             })
             .then((res) => {
-				if(res.data.title) {
+				if (res.data.title) {
 					uni.setNavigationBarTitle({
 						title: res.data.title
 					})

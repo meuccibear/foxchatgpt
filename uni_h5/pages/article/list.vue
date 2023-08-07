@@ -21,7 +21,7 @@ export default {
 		this.setData({
 			type: type
 		})
-		if(type == 'help') {
+		if (type == 'help') {
 			uni.setNavigationBarTitle({
 			  title: '使用教程'
 			})

@@ -144,7 +144,7 @@ export function selectComponent(args) {
 
 	// #ifndef MP
 	// 因App的结构略有差异,此函数无法正常使用
-	// function(e){return function e(t,n){if(n(t.$vnode||t._vnode))return t;for(var r=t.$children,i=0;i<r.length;i++){var o=e(r[i],n);if(o)return o}}(this,ov(e))}
+	// function(e){return function e(t,n){if (n(t.$vnode||t._vnode))return t;for(var r=t.$children,i=0;i<r.length;i++){var o=e(r[i],n);if (o)return o}}(this,ov(e))}
 	return selectComponentOther(args)
 	// #endif
 }

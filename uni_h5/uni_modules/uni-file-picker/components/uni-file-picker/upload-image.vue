@@ -152,10 +152,10 @@
 			},
 			prviewImage(img, index) {
 				let urls = []
-				if(Number(this.limit) === 1&&this.disablePreview&&!this.disabled){
+				if (Number(this.limit) === 1&&this.disablePreview&&!this.disabled){
 					this.$emit("choose")
 				}
-				if(this.disablePreview) return
+				if (this.disablePreview) return
 				this.filesList.forEach(i => {
 					urls.push(i.url)
 				})

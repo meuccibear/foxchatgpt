@@ -7,7 +7,7 @@
 		<view v-if="list.length > 0" class="uni-file-picker__lists is-text-box" :style="borderStyle">
 			<!-- ,'is-list-card':showType === 'list-card' -->
       <scroll-view scroll-y="true" class="scroll-Y" style="height: 400rpx">
-        <view class="uni-file-picker__lists-box" v-for="(item ,index) in list" :key="index" :class="{
+        <view class="uni-file-picker__lists-box" v-for="(item ,index) in filesList" :key="index" :class="{
           'files-border':index !== 0 && styles.dividline}"
          :style="index !== 0 && styles.dividline &&borderLineStyle">
           <view class="uni-file-picker__item">
@@ -15,10 +15,9 @@
             <!-- 	<view class="files__image is-text-image">
               <image class="header-image" :src="item.logo" mode="aspectFit"></image>
             </view> -->
-            <view class="files__name">{{item.name}}</view>
+            <view class="files__name">{{item.file_name}}</view>
             <view v-if="delIcon&&!readonly" class="icon-del-box icon-files" @click="delFile(index)">
-              <view class="icon-del icon-files"></view>
-              <view class="icon-del rotate"></view>
+              <uni-icons :class="{'App-logo': item.state == 0}" color="rgb(4, 186, 190)" :type="item.state == 1 ? 'checkbox-filled':'spinner-cycle'"></uni-icons>
             </view>
           </view>
           <view v-if="(item.progress && item.progress !== 100) ||item.progress===0 " class="file-picker__progress">
@@ -161,7 +160,7 @@
 				this.$emit("choose")
 			},
 			delFile(index) {
-				this.$emit('delFile', index)
+				// this.$emit('delFile', index)
 			},
 			value2px(value) {
 				if (typeof value === 'number') {
@@ -304,7 +303,7 @@
 		// border-radius: 50%;
 		// background-color: rgba(0, 0, 0, 0.5);
 		z-index: 2;
-		transform: rotate(-45deg);
+		//transform: rotate(-45deg);
 	}
 
 	.icon-del {
@@ -347,4 +346,20 @@
     text-align: center;
     font-size: 36 rpx;
   }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+      animation: App-logo-spin infinite 10s linear;
+    }
+  }
+
+  @keyframes App-logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
 </style>

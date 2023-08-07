@@ -31,7 +31,7 @@ export const get_extname = (fileExtname) => {
 export const get_files_and_is_max = (res, _extname) => {
 	let filePaths = []
 	let files = []
-	if(!_extname || _extname.length === 0){
+	if (!_extname || _extname.length === 0){
 		return {
 			filePaths,
 			files

@@ -33,7 +33,7 @@ class MPAnimation {
 				styles.styles.transform = ''
 			}
 			let unit = ''
-			if(type === 'rotate'){
+			if (type === 'rotate'){
 				unit = 'deg'
 			}
 			styles.styles.transform += `${type}(${args+unit}) `
@@ -95,7 +95,7 @@ class MPAnimation {
 		// #ifdef APP-NVUE
 		this.isEnd = false
 		let ref = this.$.$refs['ani'] && this.$.$refs['ani'].ref
-		if(!ref) return
+		if (!ref) return
 		this._nvueNextAnimate(this.currentStepAnimates, 0, fn)
 		this.next = 0
 		// #endif
@@ -122,7 +122,7 @@ animateTypes1.concat(animateTypes2, animateTypes3).forEach(type => {
 })
 
 export function createAnimation(option, _this) {
-	if(!_this) return
+	if (!_this) return
 	clearTimeout(_this.timer)
 	return new MPAnimation(option, _this)
 }

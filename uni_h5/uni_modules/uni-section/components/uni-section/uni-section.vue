@@ -78,7 +78,7 @@
 		},
     computed:{
       _padding(){
-        if(typeof this.padding === 'string'){
+        if (typeof this.padding === 'string'){
           return this.padding
         }
 

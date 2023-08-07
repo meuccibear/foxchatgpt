@@ -62,8 +62,8 @@
 		},
 		methods: {
 			timerClose(){
-				if(this.duration === 0) return
-				clearTimeout(this.timer) 
+				if (this.duration === 0) return
+				clearTimeout(this.timer)
 				this.timer = setTimeout(()=>{
 					this.popup.close()
 				},this.duration)
