@@ -12,7 +12,7 @@
 	const getVal = (val) => {
 		const reg = /^[0-9]*$/g
 		return (typeof val === 'number' ||　reg.test(val) )? val + 'px' : val;
-	}
+	} 
 	// #ifdef APP-NVUE
 	var domModule = weex.requireModule('dom');
 	import iconUrl from './uniicons.ttf'
@@ -61,7 +61,7 @@
 		computed:{
 			unicode(){
 				let code = this.icons.find(v=>v.font_class === this.type)
-				if (code){
+				if(code){
 					return unescape(`%u${code.unicode}`)
 				}
 				return ''
@@ -92,7 +92,5 @@
 		text-decoration: none;
 		text-align: center;
 	}
-
-
 
 </style>
