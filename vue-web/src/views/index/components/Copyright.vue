@@ -1,15 +1,28 @@
 <template>
-  <div class="float" @click="toDoc('kefu')">
-    <svg-icon icon-class="ic_kefu" class="icon"></svg-icon>
-    <span>联系客服</span>
+  <div class="copyright">
+    <div v-if="copyright || icp || gongan">
+      <a @click="toDoc('legal')">{{ copyright }}</a>
+      <a v-if="gongan" :href="'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=' + gongan.replace(/[^\d]/g, '')" target="_blank" style="margin-left: 15px;">
+        <img src="@/assets/gongan.png" style="margin-right: 3px; position: relative; top: 2px; height: 14px;">{{ gongan }}
+      </a>
+      <a v-if="icp" href="https://beian.miit.gov.cn/" target="_blank" style="margin-left: 15px;">{{ icp }}</a>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
+  computed: {
+    ...mapGetters([
+      'copyright',
+      'icp',
+      'gongan'
+    ])
+  },
   methods: {
     toDoc(type) {
-      let routeData = this.$router.resolve({ name: 'Doc', query: { type: type }})
+      const routeData = this.$router.resolve({ name: 'Doc', query: { type: type }})
       window.open(routeData.href, '_blank')
     }
   }

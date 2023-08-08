@@ -2,11 +2,11 @@
   <div class="app-wrapper" :class="'theme-' + theme">
     <sidebar
       class="sidebar-container"
+      :style="'width:' + (module === 'draw' ? 100 : 360) + 'px;'"
       @showlogin="showLogin"
       @switchModule="switchModule"
       @showUserInfo="showUserInfo"
       @showPay="showPay"
-      :style="'width:' + (module === 'draw' ? 100 : 360) + 'px;'"
     />
     <div class="main-container" :style="'margin-left:' + (module === 'draw' ? 100 : 360) + 'px;'">
       <Draw
@@ -29,13 +29,13 @@
       @close="closeUserInfo"
       @showlogin="showLogin"
       @showPay="showPay"
-    ></userinfo>
+    />
     <pay
       v-if="payShow"
       :pay-type="payType"
       @close="closePay"
       @showlogin="showLogin"
-    ></pay>
+    />
     <float />
   </div>
 </template>
@@ -44,13 +44,13 @@
 import { mapGetters } from 'vuex'
 import { getLoginQrcode, loginCheck } from '@/api/login'
 import { setToken, setSiteCode } from '@/utils/auth'
-import { Navbar, Sidebar, Login, Main, Draw, Userinfo, Pay, Float } from './components'
+import { Sidebar, Login, Main, Draw, Userinfo, Pay, Float } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { Base64 } from 'js-base64'
 var jsapi = Base64.decode('Ly9jb25zb2xlLnR0ay5pbmsvYXBpLnBocC9yZXBvcnQvZGV2d2ViL3Byb2R1Y3QvZm94X2NoYXRncHQvaG9zdC8=')
 export default {
   name: 'Index',
-  components: { Navbar, Sidebar, Login, Main, Draw, Userinfo, Pay, Float },
+  components: { Sidebar, Login, Main, Draw, Userinfo, Pay, Float },
   mixins: [ResizeMixin],
   data() {
     return {
@@ -122,7 +122,7 @@ export default {
               window.location.reload()
             }
           })
-        }, 3000);
+        }, 3000)
       })
     },
     closeLogin() {
@@ -146,15 +146,16 @@ export default {
       this.$nextTick(() => {
         if (id) {
           if (module === 'chat') {
-            this.$refs.main.setGroupId(id);
+            this.$refs.main.setGroupId(id)
           } else if (module === 'write') {
-            this.$refs.main.setPromptId(id);
+            this.$refs.main.setPromptId(id)
           } else if (module === 'cosplay') {
-            this.$refs.main.setRoleId(id);
+            this.$refs.main.setRoleId(id)
+          } else if (module === 'knowledge') {
+            this.$refs.main.setKnowledgeId(id)
           }
         }
       })
-
     },
     showUserInfo() {
       this.$store.dispatch('user/getInfo').then(res => {

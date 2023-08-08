@@ -3,12 +3,12 @@
     <div class="fox-tree">
       <div class="box-search">
         <el-input
-          placeholder="输入关键词"
           v-model="keyword"
+          placeholder="输入关键词"
           prefix-icon="el-icon-search"
           clearable
           @input="doSearch"
-        ></el-input>
+        />
       </div>
       <el-tree
         ref="tree"
@@ -24,7 +24,7 @@
       />
     </div>
     <div class="book-main">
-      <div class="content" v-html="article.content"></div>
+      <div class="content" v-html="article.content" />
     </div>
   </div>
 </template>
@@ -52,8 +52,8 @@ export default {
     '$route.query': function(query) {
       if (query.type) {
         this.type = query.type
-        if(this.type === 'help' && query.id) {
-            this.articleId = query.id
+        if (this.type === 'help' && query.id) {
+          this.articleId = query.id
         }
         this.getArticle()
       }
@@ -63,8 +63,8 @@ export default {
     const query = this.$route.query
     if (query.type) {
       this.type = query.type
-      if(this.type === 'help') {
-        if(query.id) {
+      if (this.type === 'help') {
+        if (query.id) {
           this.articleId = query.id
         } else {
           return
@@ -99,14 +99,14 @@ export default {
       getArticleTree().then(res => {
         this.articleTree = res.data
         setTimeout(() => {
-          if(this.type) {
+          if (this.type) {
             var key = this.type
             if (this.type === 'help') {
               if (!this.articleId && this.articleTree[0]['son'].length > 0) {
                 this.articleId = this.articleTree[0]['son'][0]['id']
                 this.getArticle()
               }
-              key += this.articleId;
+              key += this.articleId
             }
             this.$refs.tree.setCurrentKey(key)
           }
@@ -131,12 +131,12 @@ export default {
       if (node.isFolder) {
         return
       }
-      if(this.type === 'help') {
-        if(this.articleId === node.id) {
+      if (this.type === 'help') {
+        if (this.articleId === node.id) {
           return
         }
       } else {
-        if(this.type === node.type) {
+        if (this.type === node.type) {
           return
         }
       }

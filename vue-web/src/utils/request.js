@@ -1,13 +1,14 @@
 import axios from 'axios'
-import { Message, Loading } from 'element-ui'
-import store from '@/store'
+import { Message } from 'element-ui'
+import loading from '@/utils/loading'
+// import store from '@/store'
 import { getToken, getSiteCode } from '@/utils/auth'
 
-let loadingInstance = null
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   timeout: 120000 // request timeout
 })
+
 
 // request interceptor
 service.interceptors.request.use(
@@ -22,13 +23,7 @@ service.interceptors.request.use(
     }
 
     if (!config.headers['hideLoading'] && !config.hideLoading) {
-      loadingInstance = Loading.service({
-        fullscreen: true,
-        lock: true,
-        text: '加载中',
-        background: 'rgba(0,0,0,0.3)',
-        customClass: 'my-loading'
-      })
+      loading.show()
     }
 
     return config
@@ -53,14 +48,12 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
-    if (loadingInstance) {
-      loadingInstance.close()
-    }
+    loading.hide()
     const res = response.data
 
     // if the custom code is not 20000, it is judged as an error.
     if (res.errno) {
-      if(res.errno !== 403) {
+      if (res.errno !== 403) {
         Message({
           message: res.message || res.msg || 'Error',
           type: 'error',
@@ -73,9 +66,7 @@ service.interceptors.response.use(
     }
   },
   error => {
-    if (loadingInstance) {
-      loadingInstance.close()
-    }
+    loading.hide()
     Message({
       message: error.message,
       type: 'error',

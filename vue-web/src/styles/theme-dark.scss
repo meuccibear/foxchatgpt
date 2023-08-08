@@ -211,6 +211,18 @@
               border-color: #10a37f;
             }
           }
+          .tools__inner {
+            background: #262626;
+            border-color: #777777;
+            color: #acafac;
+
+            &::-webkit-input-placeholder {
+              color: #777777;
+            }
+            &:focus {
+              border-color: #10a37f;
+            }
+          }
         }
         .btn-send {
           background: #262626 !important;

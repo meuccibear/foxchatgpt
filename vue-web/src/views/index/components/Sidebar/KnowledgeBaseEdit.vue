@@ -2,7 +2,7 @@
   <div v-if="form">
     <el-dialog
       custom-class="my-dialog"
-      :title="group.id ? '编辑对话' : '创建新对话'"
+      :title="group.repo_id ? '编辑知识库' : '创建知识库'"
       width="440px"
       :visible="true"
       :close-on-click-modal="false"
@@ -10,8 +10,13 @@
       :before-close="closeForm"
     >
       <el-form ref="form" :model="form" :rules="formRules" label-width="100px" style="padding: 20px 0;">
-        <el-form-item label="会话标题" prop="num">
-          <el-input v-model="form.title" placeholder="自定义会话标题" size="normal" style="width: 240px;" />
+        <el-form-item label="名称" prop="num">
+          <el-input v-model="form.repo_name" placeholder="名称" size="normal" style="width: 240px;" />
+        </el-form-item>
+      </el-form>
+      <el-form ref="form" :model="form" :rules="formRules" label-width="100px" style="padding: 20px 0;">
+        <el-form-item label="说明" prop="num">
+          <el-input type="textarea" v-model="form.repo_desc" placeholder="说明" size="normal" style="width: 240px;" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -34,7 +39,10 @@ export default {
     return {
       form: null,
       formRules: {
-        title: [
+        repo_name: [
+          { required: true, message: '此项必填', trigger: 'blur' }
+        ],
+        repo_desc: [
           { required: true, message: '此项必填', trigger: 'blur' }
         ]
       }

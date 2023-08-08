@@ -157,6 +157,17 @@
               border-color: #10a37f;
             }
           }
+          .tools__inner {
+            background: #f7f7f8;
+            color: #72787e;
+
+            &::-webkit-input-placeholder {
+              color: #72787e;
+            }
+            &:focus {
+              border-color: #10a37f;
+            }
+          }
         }
         .btn-send {
           background: #f7f7f8 !important;

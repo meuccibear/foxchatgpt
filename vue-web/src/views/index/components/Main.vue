@@ -4,8 +4,14 @@
       <div class="tab-item" :class="{active: chatModel === 'default'}" @click="switchChatModel('default')" style="border-top-right-radius: 0; border-bottom-right-radius: 0;">默认</div>
       <div class="tab-item" :class="{active: chatModel === 'gpt-4'}" @click="switchChatModel('gpt-4')" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">{{ model4Name }}</div>
     </div>
-    <div v-if="lists && lists.length > 0" class="box-msg-list" :class="{'style-chat': module === 'chat' || module === 'cosplay', 'style-write': module === 'write' || module === 'draw'}">
-      <el-scrollbar ref="msglist" wrap-class="scrollbar-wrapper">
+    <div
+      v-if="lists && lists.length > 0"
+      class="box-msg-list"
+      :class="{'style-chat': module === 'chat' || module === 'cosplay', 'style-write': module === 'write' || module === 'draw'}">
+      <el-scrollbar
+        ref="msglist"
+        wrap-class="scrollbar-wrapper"
+      >
         <div class="list">
           <div v-for="(item, index) in lists" class="row" :class="item.user === 'AI'? 'row-ai' : 'row-user'">
             <div v-if="item.user === 'AI'" class="message">
@@ -61,6 +67,16 @@
 
     <div class="box-input">
       <div class="input">
+        <div class="tools">
+          <div
+            v-for="(item, index) in langs"
+            class="item"
+            :class="{active: userCache.lang.indexOf(item) > -1 }"
+            @click="changeLang(item)"
+          >
+            <a href="javascript:;">{{ item }}</a>
+          </div>
+        </div>
         <el-input
           v-model="message"
           :placeholder="placeHolder"
@@ -78,6 +94,7 @@
         />
       </div>
 
+      <custom-edit ref="edit" :checkboxData="knowledgeBase" :data="userCache.knowledgeBaseCheckData" @ok="okEdit"/>
       <Copyright />
     </div>
   </div>
@@ -92,19 +109,27 @@ import { getToken, getSiteCode } from '@/utils/auth'
 import TextComponent from './Message/Text'
 import Welcome from './Welcome'
 import Copyright from './Copyright'
+import { getLibs } from '@/api/retrieval'
+import CustomEdit from './Sidebar/customEdit'
+
 
 import 'katex/dist/katex.min.css'
 import '@/styles/lib/tailwind.css'
 import '@/styles/lib/highlight.scss'
 import '@/styles/lib/github-markdown.scss'
+import {saveGroup} from "@/api/group";
 
 var textStacks = []
 var textOutputSi = 0
 
 export default {
   name: 'Main',
-  components: { TextComponent, Welcome, Copyright },
+  components: {CustomEdit, TextComponent, Welcome, Copyright },
   data() {
+    let userCache = {
+      lang: [],
+      knowledgeBaseCheckData: []
+    }
     return {
       module: 'chat',
       chatModel: 'default',
@@ -118,7 +143,18 @@ export default {
       prompt_id: 0,
       writePrompt: {},
       role_id: 0,
-      cosplayRole: {}
+      cosplayRole: {},
+      userCache: userCache,
+      knowledgeBase: [],
+      langs: ['联网', '知识库'],
+      formRules: {
+        title: [
+          { required: true, message: '此项必填', trigger: 'blur' }
+        ],
+        desc: [
+          { required: true, message: '此项必填', trigger: 'blur' }
+        ]
+      }
     }
   },
   computed: {
@@ -150,7 +186,62 @@ export default {
       return placeholder
     }
   },
+  created (){
+    getLibs().then(response => {
+      this.knowledgeBase =  response.data
+    })
+    let userCache = localStorage.getItem('UserCache');
+    if(userCache){
+      this.userCache = JSON.parse(userCache)
+    }
+  },
   methods: {
+    okEdit (val) {
+      if(val){
+        this.userCache.knowledgeBaseCheckData = val
+        console.log(val)
+        this.cache()
+        this.changeLang()
+      }
+    },
+    saveKnowledgeBaseEdit(group) {
+      console.log("group", group)
+    },
+    changeLang(lang) {
+      if (lang) {
+        if (this.langs[1] === lang) {
+          this.$refs.edit.visible = true
+          return
+        }
+        const index = this.userCache.lang.indexOf(lang)
+        if ( index > -1) {
+          this.userCache.lang.splice(index, 1)
+        } else {
+          this.userCache.lang.push(lang)
+        }
+        // this.inputShow = true
+      } else {
+        const lan = this.langs[1]
+        const index = this.userCache.lang.indexOf(lan)
+        if (this.userCache.knowledgeBaseCheckData.length != 0){
+          if (index === -1){
+            console.log('添加了')
+            this.userCache.lang.push(lan)
+          }
+        } else if (index > -1) {
+          this.userCache.lang.splice(index, 1)
+        }
+      }
+      this.cache()
+    },
+    cache: function (){
+      console.log('cache:', this.userCache)
+      localStorage.setItem('UserCache', JSON.stringify(this.userCache))
+      // uni.setStorage({
+      //   key: 'UserCache',
+      //   data: this.userCache
+      // })
+    },
     async sendText() {
       if (this.writing || this.writingText) {
         return
@@ -160,6 +251,18 @@ export default {
         this.$message.error('请输入您的问题')
         this.message = ''
         return
+      }
+
+      console.log('checkedItem:', this.userCache)
+      let to = []
+      for (let item in this.userCache.lang) {
+        if (this.userCache.lang[item] === this.langs[0]) {
+          to.push('internetsearch')
+        } else {
+          for (let itemSon in this.userCache.knowledgeBaseCheckData) {
+            to.push('repodb:' + this.userCache.knowledgeBaseCheckData[itemSon])
+          }
+        }
       }
 
       if (textOutputSi) {
@@ -182,7 +285,8 @@ export default {
       headers.append('X-site', getSiteCode() || '')
       const url = process.env.VUE_APP_BASE_API + '/chat/sendText'
       const data = {
-        message: message
+        message: message,
+        tools: to
       }
       if (this.module === 'chat') {
         data.group_id = this.group_id
@@ -314,6 +418,12 @@ export default {
       this.getRole()
       this.getHistoryMsg()
     },
+    setKnowledgeId(group_id) {
+      this.module = 'knowledge'
+      this.group_id = group_id
+      this.page = 1
+      this.getHistoryMsg()
+    },
     getHistoryMsg() {
       if (this.module === 'chat') {
         this.getChatHistoryMsg()
@@ -413,7 +523,7 @@ export default {
       })
     },
     toDoc(type) {
-      let routeData = this.$router.resolve({ name: 'Doc', query: { type: type } })
+      let routeData = this.$router.resolve({ name: 'Doc', query: { type: type }})
       window.open(routeData.href, '_blank')
     }
   }
@@ -431,6 +541,13 @@ export default {
   }
 }
 .input .el-textarea__inner {
+  padding: 10px 60px 10px 15px;
+  letter-spacing: 1px;
+  transition: all 0.1s ease-in-out;
+  font-size: 16px;
+}
+
+.input .tools__inner {
   padding: 10px 60px 10px 15px;
   letter-spacing: 1px;
   transition: all 0.1s ease-in-out;
@@ -524,4 +641,64 @@ export default {
   }
 
 }
+
+.input .tools {
+  width: 100%;
+  height: 46px;
+  //margin-bottom: 4px;
+  box-sizing: border-box;
+  //padding-top: 10px;
+  padding: 10px 10px;
+}
+
+.input .tools .item {
+  width: auto;
+  //height: 46px;
+  line-height: 26px;
+  background: #fff;
+  font-size: 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  color: #444;
+  float: left;
+  margin-right: 5px;
+  position: relative;
+  overflow: visible;
+  padding: 0 10px;
+}
+
+.box-input .tools .item .ic_sj {
+  width: 24rpx;
+  height: 12rpx;
+  position: absolute;
+  left: 50%;
+  margin-left: -12rpx;
+  bottom: -12rpx;
+  display: none;
+}
+
+.box-input .tools .item.active {
+  border-color: #04BABE;
+}
+
+.box-input .tools .item.active .ic_sj {
+  display: block;
+}
+
+.box-input .tools .item:active {
+  background-color: #fafafa;
+}
+
+.box-input .tools .close {
+  float: right;
+  margin-right: 0;
+  background: none;
+  border: none;
+  transform: rotate(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s;
+}
+
 </style>

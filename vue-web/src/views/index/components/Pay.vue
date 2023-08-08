@@ -26,7 +26,7 @@
                 <span class="unit" v-if="type === 'draw'">张</span>
               </div>
               <div class="price">
-                <span class="unit">￥</span>{{item.price / 100}}
+                <span class="unit">￥</span>{{ item.price / 100 }}
               </div>
               <div class="market_price" v-if="item.market_price > 0">￥{{item.market_price / 100}}</div>
             </div>
