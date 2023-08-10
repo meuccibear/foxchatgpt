@@ -4,99 +4,110 @@
       <div class="tab-item" :class="{active: chatModel === 'default'}" @click="switchChatModel('default')" style="border-top-right-radius: 0; border-bottom-right-radius: 0;">默认</div>
       <div class="tab-item" :class="{active: chatModel === 'gpt-4'}" @click="switchChatModel('gpt-4')" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">{{ model4Name }}</div>
     </div>
-    <div
-      v-if="lists && lists.length > 0"
-      class="box-msg-list"
-      :class="{'style-chat': module === 'chat' || module === 'cosplay', 'style-write': module === 'write' || module === 'draw'}">
-      <el-scrollbar
-        ref="msglist"
-        wrap-class="scrollbar-wrapper"
-      >
-        <div class="list">
-          <div v-for="(item, index) in lists" class="row" :class="item.user === 'AI'? 'row-ai' : 'row-user'">
-            <div v-if="item.user === 'AI'" class="message">
-              <div class="avatar">
-                <img :src="aiAvatar">
+    <template v-if="module !== 'knowledge'" >
+      <div
+        v-if="lists && lists.length > 0"
+        class="box-msg-list"
+        :class="{'style-chat': module === 'chat' || module === 'cosplay', 'style-write': module === 'write' || module === 'draw'}">
+        <el-scrollbar
+          ref="msglist"
+          wrap-class="scrollbar-wrapper"
+        >
+          <div class="list">
+            <div v-for="(item, index) in lists" class="row" :class="item.user === 'AI'? 'row-ai' : 'row-user'">
+              <div v-if="item.user === 'AI'" class="message">
+                <div class="avatar">
+                  <img :src="aiAvatar">
+                </div>
+                <div class="text markdown-body">
+                  <textComponent
+                    :text="item.message"
+                  />
+                  <div class="tools">
+                    <span
+                      v-clipboard:copy="textFormat(item.message)"
+                      v-clipboard:success="onCopySuccess"
+                      v-clipboard:error="onCopyError"
+                      class="copy text-primary"
+                    >复制内容</span>
+                  </div>
+                </div>
               </div>
-              <div class="text markdown-body">
-                <textComponent
-                  :text="item.message"
-                />
-                <div class="tools">
-                  <span
-                    v-clipboard:copy="textFormat(item.message)"
-                    v-clipboard:success="onCopySuccess"
-                    v-clipboard:error="onCopyError"
-                    class="copy text-primary"
-                  >复制内容</span>
+              <div v-else class="message">
+                <div class="avatar" style="background: #9aa37e;">
+                  <img :src="avatar || '/static/img/ic_user.png'">
+                </div>
+                <div class="text markdown-body">
+                  <textComponent
+                    :text="item.message"
+                  />
+                </div>
+              </div>
+              <div style="clear: both"></div>
+            </div>
+            <div v-if="writing || writingText" class="row row-ai">
+              <div class="message">
+                <div class="avatar"><img :src="aiAvatar"></div>
+                <div class="text markdown-body">
+                  <textComponent
+                    :text="writingText"
+                    :writing="!!(writing || writingText)"
+                  />
                 </div>
               </div>
             </div>
-            <div v-else class="message">
-              <div class="avatar" style="background: #9aa37e;">
-                <img :src="avatar || '/static/img/ic_user.png'">
-              </div>
-              <div class="text markdown-body">
-                <textComponent
-                  :text="item.message"
-                />
-              </div>
-            </div>
-            <div style="clear: both"></div>
           </div>
-          <div v-if="writing || writingText" class="row row-ai">
-            <div class="message">
-              <div class="avatar"><img :src="aiAvatar"></div>
-              <div class="text markdown-body">
-                <textComponent
-                  :text="writingText"
-                  :writing="!!(writing || writingText)"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </el-scrollbar>
-    </div>
-
-    <welcome
-      v-else
-      :page-title="page_title"
-      @use="quickMessage"
-    />
-
-    <div class="box-input">
-      <div class="input">
-        <div class="tools">
-          <div
-            v-for="(item, index) in langs"
-            class="item"
-            :class="{active: userCache.lang.indexOf(item) > -1 }"
-            @click="changeLang(item)"
-          >
-            <a href="javascript:;">{{ item }}</a>
-          </div>
-        </div>
-        <el-input
-          v-model="message"
-          :placeholder="placeHolder"
-          type="textarea"
-          :autosize="{ minRows: 1, maxRows: 8 }"
-          maxlength="3000"
-          @keyup.enter.native="onEnter"
-        />
-        <el-button
-          class="btn-send"
-          type="default"
-          :loading="writing"
-          icon="el-icon-position"
-          @click="sendText"
-        />
+        </el-scrollbar>
       </div>
 
-      <custom-edit ref="edit" :checkboxData="knowledgeBase" :data="userCache.knowledgeBaseCheckData" @ok="okEdit"/>
-      <Copyright />
+      <welcome
+        v-else
+        :page-title="page_title"
+        @use="quickMessage"
+      />
+
+      <div class="box-input">
+        <div class="input">
+          <div class="tools">
+            <div
+              v-for="(item, index) in langs"
+              class="item"
+              :class="{active: userCache.lang.indexOf(item) > -1 }"
+              @click="changeLang(item)"
+            >
+              <a href="javascript:;">{{ item }}</a>
+            </div>
+          </div>
+          <el-input
+            v-model="message"
+            :placeholder="placeHolder"
+            type="textarea"
+            :autosize="{ minRows: 1, maxRows: 8 }"
+            maxlength="3000"
+            @keyup.enter.native="onEnter"
+          />
+          <el-button
+            class="btn-send"
+            type="default"
+            :loading="writing"
+            icon="el-icon-position"
+            @click="sendText"
+          />
+        </div>
+
+        <custom-edit ref="edit" :checkboxData="knowledgeBase" :data="userCache.knowledgeBaseCheckData" @ok="okEdit"/>
+        <Copyright />
+      </div>
+    </template>
+
+    <div v-else >
+      <welcome
+        :tutorial="false"
+        :page-title="page_title"
+        @use="quickMessage"
+      />
     </div>
+
   </div>
 </template>
 
@@ -131,6 +142,7 @@ export default {
       knowledgeBaseCheckData: []
     }
     return {
+      inputB: true,
       module: 'chat',
       chatModel: 'default',
       group_id: 0,
@@ -431,6 +443,9 @@ export default {
         this.getWriteHistoryMsg()
       } else if (this.module === 'cosplay') {
         this.getCosplayHistoryMsg()
+      } else if (this.module === 'knowledge'){
+        this.lists = []
+        this.inputB = false
       }
     },
     getChatHistoryMsg() {

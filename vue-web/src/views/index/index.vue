@@ -151,7 +151,9 @@ export default {
             this.$refs.main.setPromptId(id)
           } else if (module === 'cosplay') {
             this.$refs.main.setRoleId(id)
-          } else if (module === 'knowledge') {
+          }
+        } else {
+          if (module === 'knowledge') {
             this.$refs.main.setKnowledgeId(id)
           }
         }

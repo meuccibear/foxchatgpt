@@ -1,39 +1,63 @@
 <template>
   <div class="welcome">
-    <div class="title">{{ pageTitle }}</div>
-    <div class="tips-list">
-      <div class="column">
-        <div class="h-item">
-          <svg-icon class="icon" icon-class="ic_write" style="font-size: 24px;" />
-          <div class="tit">AI 创作</div>
+    <template v-if="tutorial">
+      <div class="title">{{ pageTitle }}</div>
+      <div class="tips-list">
+        <div class="column">
+          <div class="h-item">
+            <svg-icon class="icon" icon-class="ic_write" style="font-size: 24px;" />
+            <div class="tit">AI 创作</div>
+          </div>
+          <ul>
+            <li @click="quickMessage('写一首赞美祖国的诗')">写一首赞美祖国的诗 →</li>
+            <li @click="quickMessage('写一篇科幻小说')">写一篇科幻小说 →</li>
+            <li @click="quickMessage('安排一场发布会流程')">安排一场发布会流程 →</li>
+          </ul>
         </div>
-        <ul>
-          <li @click="quickMessage('写一首赞美祖国的诗')">写一首赞美祖国的诗 →</li>
-          <li @click="quickMessage('写一篇科幻小说')">写一篇科幻小说 →</li>
-          <li @click="quickMessage('安排一场发布会流程')">安排一场发布会流程 →</li>
-        </ul>
+        <div class="column">
+          <div class="h-item">
+            <svg-icon class="icon" icon-class="ic_linggan" style="font-size: 24px;" />
+            <div class="tit">有趣的提问</div>
+          </div>
+          <ul>
+            <li @click="quickMessage('有哪些有趣的科学实验')">有哪些有趣的科学实验 →</li>
+            <li @click="quickMessage('问一个AI也答不出的问题')">问一个AI也答不出的问题 →</li>
+            <li @click="quickMessage('AI会替代人类工作吗')">AI会替代人类工作吗 →</li>
+          </ul>
+        </div>
+        <div class="column">
+          <div class="h-item">
+            <svg-icon class="icon" icon-class="ic_baike" style="font-size: 24px;" />
+            <div class="tit">AI 百科</div>
+          </div>
+          <ul>
+            <li @click="quickMessage('用简单的术语来解释人工智能')">简单解释一下人工智能 →</li>
+            <li @click="quickMessage('红烧牛肉的做法')">红烧牛肉的做法 →</li>
+            <li @click="quickMessage('请介绍一下百度文心')">请介绍一下百度文心 →</li>
+          </ul>
+        </div>
       </div>
-      <div class="column">
-        <div class="h-item">
-          <svg-icon class="icon" icon-class="ic_linggan" style="font-size: 24px;" />
-          <div class="tit">有趣的提问</div>
+    </template>
+
+    <div v-else>
+      <div class="title">知识库指南</div>
+      <div class="tips-list">
+        <div class="page-container">
+<!--          <div class="h-item">-->
+<!--            <svg-icon class="icon" icon-class="ic_write" style="font-size: 24px;" />-->
+<!--            <div class="tit">AI 创作</div>-->
+<!--          </div>-->
+<!--          <ul>-->
+<!--            <li>写一首赞美祖国的诗 →</li>-->
+<!--            <li>写一篇科幻小说 →</li>-->
+<!--            <li>安排一场发布会流程 →</li>-->
+<!--          </ul>-->
+          <p>1. 新建自己的知识库</p>
+          <p>2. 上传自己知识库的文件 【支持的文件格式：.docx, .txt, .pdf, .doc】</p>
+          <p>3. 编辑知识库，查看已上传的文件是否【解析成功<i class="el-icon-success" style="color: rgb(4, 186, 190);" />】或者【正在解析<i class="el-icon-loading" style="color: rgb(4, 186, 190);" />】</p>
+          <p>4.进入【对话】，点击 消息框上方【知识库】选择知识库</p>
+          <p>快点体验知识库吧～</p>
         </div>
-        <ul>
-          <li @click="quickMessage('有哪些有趣的科学实验')">有哪些有趣的科学实验 →</li>
-          <li @click="quickMessage('问一个AI也答不出的问题')">问一个AI也答不出的问题 →</li>
-          <li @click="quickMessage('AI会替代人类工作吗')">AI会替代人类工作吗 →</li>
-        </ul>
-      </div>
-      <div class="column">
-        <div class="h-item">
-          <svg-icon class="icon" icon-class="ic_baike" style="font-size: 24px;" />
-          <div class="tit">AI 百科</div>
-        </div>
-        <ul>
-          <li @click="quickMessage('用简单的术语来解释人工智能')">简单解释一下人工智能 →</li>
-          <li @click="quickMessage('红烧牛肉的做法')">红烧牛肉的做法 →</li>
-          <li @click="quickMessage('请介绍一下百度文心')">请介绍一下百度文心 →</li>
-        </ul>
       </div>
     </div>
   </div>
@@ -45,6 +69,10 @@ export default {
     pageTitle: {
       type: String,
       default: ''
+    },
+    tutorial: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
@@ -83,6 +111,17 @@ export default {
     display: flex;
     justify-content: space-around;
     padding: 10px;
+
+    .page-container {
+      width: 70%;
+      padding: 20px 10px 0 10px;
+
+      p {
+        font-size: 14px;
+        color: #5e6d82;
+        line-height: 1.5rem;
+      }
+    }
 
     .column {
       width: 33%;

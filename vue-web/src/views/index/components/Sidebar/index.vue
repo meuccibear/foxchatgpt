@@ -237,6 +237,7 @@
     <knowledge-base-edit v-if="knowledgeBase" :group="knowledgeBase" @close="closeKnowledgeBaseEdit" @submit="saveKnowledgeBaseEdit" />
     <el-upload
       v-show="false"
+      accept=".docx,.txt,.pdf,.doc"
       ref="upload"
       class="upload-demo"
       name='files'
@@ -345,9 +346,9 @@ export default {
           activeId = this.activeRoleId
         }
       } else if (module === 'knowledge'){
-        if (this.knowledgeBaseId) {
-          activeId = this.knowledgeBaseId
-        }
+        // if (this.knowledgeBaseId) {
+        //   activeId = this.knowledgeBaseId
+        // }
       }
       this.$emit('switchModule', module, activeId);
       this.module = module
