@@ -90,9 +90,9 @@ export default {
   },
   methods: {
     submit(ref) {
+      const $this = this
       this.$refs[ref].validate().then(res => {
         let status = this.baseFormData.repo_id ? true : false
-        const $this = this
         app.globalData.util.request({
           url: status ? '/Retrieval/updateLib' : '/Retrieval/addLib',
           data: this.baseFormData

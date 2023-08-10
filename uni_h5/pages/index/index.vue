@@ -146,27 +146,7 @@
         userCache: userCache,
         langs: ['联网', '知识库'],
         inputShow: true,
-        knowledgeBase: [
-          {
-            repo_id: 'mvdb274eefbae618428585fc8f6facc1',
-            repo_name: "\u540c\u4ec1\u5802\u77e5\u8bc6\u5e93",
-            repo_desc: "\u548c\u540c\u4ec1\u5802\u53ca\u5176\u4ea7\u54c1\u76f8\u5173\u7684\u5185\u5bb9"
-          }
-        ]
-        /**
-         * [
-         *         {
-         *             "repo_id":"mvdb274eefbae618428585fc8f6facc1",
-         *             "repo_name":"\u540c\u4ec1\u5802\u77e5\u8bc6\u5e93",
-         *             "repo_desc":"\u548c\u540c\u4ec1\u5802\u53ca\u5176\u4ea7\u54c1\u76f8\u5173\u7684\u5185\u5bb9"
-         *         },
-         *         {
-         *             "repo_id":"mvdbcff53daea9be4592841855e858cc",
-         *             "repo_name":"\u79c1\u57df\u5f15\u6d41\u4e0e\u793e\u7fa4\u8425\u9500\u77e5\u8bc6\u5e93",
-         *             "repo_desc":"\u82b1\u7237\u7684\u79c1\u57df\u5f15\u6d41\u4e0e\u793e\u7fa4\u8425\u9500\uff0c\u76f4\u64ad\u6280\u5de7\u7b49\u6570\u5b57\u5a92\u4f53\u8425\u9500\u76f8\u5173\u5185\u5bb9"
-         *         }
-         *     ]
-         */
+        knowledgeBase: []
       //   ["internetsearch","repodb:mvdbb96ca0b7e3ef4c1b97e7f68722f8","repodb:mvdbb96ca0b7e3ef4c1b97e7f685555"]
 			};
 		},

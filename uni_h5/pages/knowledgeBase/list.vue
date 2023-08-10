@@ -118,9 +118,11 @@ export default {
     uni.$on('item', (obj) => {
       console.log('obj:', obj)
     })
+    let $this = this
     uni.$on('isRefresh',function(data){
       console.log('监听到事件来自返回的参数：' + data);
       // TODO 下面执行刷新的方法
+      $this.init()
     })
   },
   methods: {
@@ -158,18 +160,18 @@ export default {
           // this.goBackPage(1)
           break
         case 'addFile':
-          uni.showNavigationBarLoading();
-          uni.showLoading({
-            title: '加载中'
-          });
           uni.chooseFile({
             count: 1,
             extension: ['docx', 'txt', 'pdf', 'doc'],
             success: (res) => {
+              uni.showNavigationBarLoading();
+              uni.showLoading({
+                title: '加载中'
+              });
               console.log('选择文件成功，临时路径为', res.tempFilePaths[0])
               var imageSrc = res.tempFilePaths[0]
               uni.uploadFile({
-                url: 'http://165.154.36.236:8010/uploadfiles',
+                url: 'http://165.154.36.236:8010/uploadfiles/',
                 filePath: imageSrc,
                 fileType: 'image',
                 formData: {
@@ -177,13 +179,22 @@ export default {
                 },
                 name: 'files',
                 success: (res) => {
-                  console.log('uploadImage success, res is:', res)
-                  uni.showToast({
-                    title: '上传成功',
-                    icon: 'success',
-                    duration: 1000
-                  })
-                  this.imageSrc = imageSrc
+                  const data = JSON.parse(res.data)
+                  if (data.message.length === 0) {
+                    uni.showToast({
+                      title: '上传成功',
+                      icon: 'success',
+                      duration: 1000
+                    })
+                  } else {
+                    uni.showModal({
+                      content: data.message,
+                      showCancel: false
+                    });
+                  }
+                  uni.hideLoading();
+                  uni.hideNavigationBarLoading();
+                  // this.imageSrc = imageSrc
                 },
                 fail: (err) => {
                   console.log('uploadImage fail', err);
@@ -191,8 +202,6 @@ export default {
                     content: err.errMsg,
                     showCancel: false
                   });
-                },
-                complete: function (res) {
                   uni.hideLoading();
                   uni.hideNavigationBarLoading();
                 }
@@ -218,10 +227,6 @@ export default {
                 }
               })
               // #endif
-            },
-            complete: function (res) {
-              uni.hideLoading();
-              uni.hideNavigationBarLoading();
             }
           })
           break
@@ -329,6 +334,15 @@ export default {
       //   title: '点击了悬浮按钮',
       //   icon: 'none'
       // })
+    }
+  },
+  watch: {
+    '$route'() {
+      this.init()
+      // console.log("a")
+      // 若路由产生变换（退出或提交成功切换回上一页时），将页面数据重置为初始值
+      // Object.assign(this.$data, this.$options.data())
+      // 此处别忘了加上created里需要执行的请求，因为在keep-alive的单页面中切换路由不会执行created钩子
     }
   }
 };
