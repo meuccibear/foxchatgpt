@@ -134,11 +134,11 @@ util.upload = function (option = null) {
     });
 };
 util.login = function () {
-    var sitecode = uni.getStorageSync('sitecode')
-    var tuid = uni.getStorageSync('tuid')
-	var url = '/web.php/login/h5?sitecode=' + sitecode + '&tuid=' + tuid + '&from=' + encodeURIComponent(window.location.href)
-    console.log('url:', url)
-	window.location.href = url
+  var sitecode = uni.getStorageSync('sitecode')
+  var tuid = uni.getStorageSync('tuid')
+  var url = '/web.php/login/h5?sitecode=' + sitecode + '&tuid=' + tuid + '&from=' + encodeURIComponent(window.location.href)
+  // console.log('url:', url)
+  window.location.href = url
 };
 
 /**

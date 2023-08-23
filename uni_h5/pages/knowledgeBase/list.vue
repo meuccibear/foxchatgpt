@@ -168,10 +168,11 @@ export default {
               uni.showLoading({
                 title: '加载中'
               });
-              console.log('选择文件成功，临时路径为', res.tempFilePaths[0])
+              // console.log('选择文件成功，临时路径为', res.tempFilePaths[0])
               var imageSrc = res.tempFilePaths[0]
               uni.uploadFile({
-                url: 'http://165.154.36.236:8010/uploadfiles/',
+                // url: 'http://165.154.36.236:8010/uploadfiles/',
+                url: 'https://api.i.sale:8010/uploadfiles/',
                 filePath: imageSrc,
                 fileType: 'image',
                 formData: {
