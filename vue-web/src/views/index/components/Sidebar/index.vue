@@ -237,12 +237,12 @@
     <knowledge-base-edit v-if="knowledgeBase" :group="knowledgeBase" @close="closeKnowledgeBaseEdit" @submit="saveKnowledgeBaseEdit" />
     <el-upload
       v-show="false"
-      accept=".docx,.txt,.pdf,.doc"
+      accept=".docx,.txt,.pdf,.doc,.excel"
       ref="upload"
       class="upload-demo"
       name='files'
       :data="fileData"
-      action="http://165.154.36.236:8010/uploadfiles/"
+      action="https://api.i.sale:8010/uploadfiles/"
       :on-success="handleSuccess"
       :before-upload="beforeUpload"
       :on-error="handleError">

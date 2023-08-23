@@ -201,6 +201,7 @@ export default {
   created (){
     getLibs().then(response => {
       this.knowledgeBase =  response.data
+      console.log('this.knowledgeBase:', JSON.stringify(this.knowledgeBase))
     })
     let userCache = localStorage.getItem('UserCache');
     if(userCache){
@@ -247,7 +248,7 @@ export default {
       this.cache()
     },
     cache: function (){
-      console.log('cache:', this.userCache)
+      console.log('cache:', JSON.stringify(this.userCache))
       localStorage.setItem('UserCache', JSON.stringify(this.userCache))
       // uni.setStorage({
       //   key: 'UserCache',

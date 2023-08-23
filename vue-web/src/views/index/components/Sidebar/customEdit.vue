@@ -14,7 +14,7 @@
       <el-checkbox-group v-model="checkedItem" >
         <ul class="infinite-list" v-infinite-scroll="load" style="overflow:auto">
           <li v-for="item in checkboxData"  class="infinite-list-item">
-              <el-checkbox :label="item.repo_name" :key="item.repo_id" border >{{item.repo_name}}</el-checkbox>
+              <el-checkbox :label="item.repo_id" border >{{item.repo_name}}</el-checkbox>
           </li>
         </ul>
       </el-checkbox-group>
@@ -62,7 +62,7 @@ export default {
     },
     doSubmit() {
       this.visible = false
-      console.log(this.checkboxData)
+      console.log('this.checkedItem', JSON.stringify(this.checkedItem))
       this.$emit('ok', this.checkedItem)
     }
   }
